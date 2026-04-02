@@ -12,7 +12,7 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "test": "mocha ./test/ --recursive",
+    "test": "LANG= mocha ./test/ --recursive",
     "lint": "eslint ."
   },
   "dependencies": {
