@@ -3,6 +3,9 @@
   "version": "3.3.0",
   "description": "Activity Streams 2.0 JavaScript Implementation",
   "author": "James M Snell <jasnell@us.ibm.com>",
+  "contributors": [
+    "Evan Prodromou <evanp@socialweb.foundation>"
+  ],
   "keywords": [
     "activitystreams"
   ],
