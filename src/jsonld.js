@@ -32,7 +32,7 @@ class JsonLD {
 
   static async normalize(expanded, options = {}) {
     return jsonld.canonize(expanded, {
-      format: 'application/nquads',
+      format: 'application/n-quads',
       ...options
     });
   }
@@ -80,7 +80,7 @@ class JsonLD {
   }
 
   static async importFromRDF(input) {
-    const expanded = await jsonld.fromRDF(input, {format: 'application/nquads'});
+    const expanded = await jsonld.fromRDF(input, {format: 'application/n-quads'});
     return models.wrap_object(expanded[0]);
   }
 }
