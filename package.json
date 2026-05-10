@@ -41,7 +41,7 @@
     "@digitalbazaar/ed25519-verification-key-2020": "^4.1.0",
     "@digitalbazaar/x25519-key-agreement-key-2020": "^3.0.1",
     "crypto-ld": "^7.0.0",
-    "eslint": "^8.39.0",
+    "eslint": "^10.3.0",
     "mocha": "^11.7.5",
     "through2": "^4.0.2"
   },
