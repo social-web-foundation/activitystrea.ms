@@ -2,9 +2,9 @@
   "name": "activitystrea.ms",
   "version": "4.0.0-dev.0",
   "description": "Activity Streams 2.0 JavaScript Implementation",
-  "author": "James M Snell <jasnell@us.ibm.com>",
+  "author": "Evan Prodromou <evanp@socialweb.foundation>",
   "contributors": [
-    "Evan Prodromou <evanp@socialweb.foundation>"
+    "James M Snell <jasnell@us.ibm.com>"
   ],
   "keywords": [
     "activitystreams"

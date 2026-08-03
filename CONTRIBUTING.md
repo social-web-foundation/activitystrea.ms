@@ -18,4 +18,4 @@ Pull requests are accepted under the discretion of the project maintainer(s).  I
 
 File bugs or feature requests using Github Issue Tracker.
 
-https://github.com/jasnell/activitystreams.js/issues
+<https://github.com/social-web-foundation/activitystrea.ms/issues>
