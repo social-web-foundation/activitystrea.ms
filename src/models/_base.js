@@ -1,27 +1,27 @@
-'use strict';
+'use strict'
 
-const Readable = require('readable-stream').Readable;
-const reasoner = require('../reasoner');
-const LanguageValue = require('./_languagevalue');
-const models = require('../models');
-const jsonld = require('../jsonld');
-const as = require('vocabs-as');
-const asx = require('vocabs-asx');
-const xsd = require('vocabs-xsd');
-const owl = require('vocabs-owl');
-const utils = require('../utils');
-const Environment = require('../environment');
-const kEnvironment = Environment.environment;
-const throwif = utils.throwif;
-const is_string = utils.is_string;
+const Readable = require('readable-stream').Readable
+const reasoner = require('../reasoner')
+const LanguageValue = require('./_languagevalue')
+const models = require('../models')
+const jsonld = require('../jsonld')
+const as = require('vocabs-as')
+const asx = require('vocabs-asx')
+const xsd = require('vocabs-xsd')
+const owl = require('vocabs-owl')
+const utils = require('../utils')
+const Environment = require('../environment')
+const kEnvironment = Environment.environment
+const throwif = utils.throwif
+const isString = utils.isString
 
-const _expanded = Symbol('expanded');
-const _base = Symbol('base');
-const _builder = Symbol('builder');
-const _options = Symbol('options');
-const _done = Symbol('done');
-const _items = Symbol('items');
-const _includes = Symbol('includes');
+const _expanded = Symbol('expanded')
+const _base = Symbol('base')
+const _builder = Symbol('builder')
+const _options = Symbol('options')
+const _done = Symbol('done')
+const _items = Symbol('items')
+const _includes = Symbol('includes')
 
 const ACTIVITY_TYPES = [
   as.Activity,
@@ -100,201 +100,201 @@ const ACTIVITY_PROPS = [
   as.instrument
 ]
 
-function is_literal(item) {
-  return item && Object.hasOwn(item, '@value');
+function isLiteral (item) {
+  return item && Object.hasOwn(item, '@value')
 }
 
-function is_iterable(item) {
-  if (item === undefined) { return false; }
-  if (typeof item === 'string') { return false; }
-  if (item[_expanded] !== undefined) { return false; } // It's a Base obj
-  if (item instanceof LanguageValue) { return false; }
-  if (item instanceof LanguageValue.Builder) { return false; }
-  return typeof item[Symbol.iterator] === 'function';
+function isIterable (item) {
+  if (item === undefined) { return false }
+  if (typeof item === 'string') { return false }
+  if (item[_expanded] !== undefined) { return false } // It's a Base obj
+  if (item instanceof LanguageValue) { return false }
+  if (item instanceof LanguageValue.Builder) { return false }
+  return typeof item[Symbol.iterator] === 'function'
 }
 
-function convert(item) {
-  const type = item['@type'];
-  let value = item['@value'];
+function convert (item) {
+  const type = item['@type']
+  let value = item['@value']
   if (type) {
-    const node = reasoner.node(type);
+    const node = reasoner.node(type)
     if (node.is(asx.Number)) {
-      value = Number(value);
+      value = Number(value)
     } else if (node.is(xsd.duration)) {
       // do nothing
     } else if (node.is(asx.Date)) {
-      value = new Date(value);
-    }else if (node.is(asx.Boolean)) {
-      value = value !== 'false';
+      value = new Date(value)
+    } else if (node.is(asx.Boolean)) {
+      value = value !== 'false'
     }
   }
-  return value;
+  return value
 }
 
 class ValueIterator {
-  constructor(items, environment) {
-    this[_items] = items;
-    this[kEnvironment] = environment;
+  constructor (items, environment) {
+    this[_items] = items
+    this[kEnvironment] = environment
   }
 
-  *[Symbol.iterator] () {
+  * [Symbol.iterator] () {
     for (const item of this[_items]) {
-      if (is_literal(item)) {
-        yield convert(item);
+      if (isLiteral(item)) {
+        yield convert(item)
       } else if (item['@list']) {
         for (const litem of item['@list']) {
-          yield is_literal(litem) ?
-            convert(litem) :
-            models.wrap_object(litem, this[kEnvironment]);
+          yield isLiteral(litem)
+            ? convert(litem)
+            : models.wrap_object(litem, this[kEnvironment])
         }
       } else {
-        yield models.wrap_object(item, this[kEnvironment]);
+        yield models.wrap_object(item, this[kEnvironment])
       }
     }
   }
 
-  get first() {
-    const iter = this[Symbol.iterator]();
-    const ret = iter.next().value;
+  get first () {
+    const iter = this[Symbol.iterator]()
+    const ret = iter.next().value
     Object.defineProperty(this, 'first', {
       enumerable: true,
       configurable: false,
       value: ret
-    });
-    return ret;
+    })
+    return ret
   }
 
-  get length() {
-    const items = this[_items];
-    const ret = (items.length > 0 && items[0]['@list']) ?
-      items[0]['@list'].length :
-      items.length;
+  get length () {
+    const items = this[_items]
+    const ret = (items.length > 0 && items[0]['@list'])
+      ? items[0]['@list'].length
+      : items.length
     Object.defineProperty(this, 'length', {
       enumerable: true,
       configurable: false,
       value: ret
-    });
-    return ret;
+    })
+    return ret
   }
 
-  toArray() {
-    return Array.from(this);
+  toArray () {
+    return Array.from(this)
   }
 }
 
 class BaseReader extends Readable {
-  constructor(base, options) {
-    options = options || {};
-    super(options);
-    this[_base] = base;
-    this[_options] = options;
+  constructor (base, options) {
+    options = options || {}
+    super(options)
+    this[_base] = base
+    this[_options] = options
   }
 
-  _read() {
-    if (this[_done]) return;
-    const objectmode = this[_options].objectMode;
-    this[_done] = true;
+  _read () {
+    if (this[_done]) return
+    const objectmode = this[_options].objectMode
+    this[_done] = true
     const method =
-      objectmode ?
-        this[_base].export :
-        this[_base].write;
+      objectmode
+        ? this[_base].export
+        : this[_base].write
     method.call(this[_base], this[_options], (err, doc) => {
-      if (err) return this.emit('error', err);
-      this.push(objectmode ? doc : new Buffer.from(doc, 'utf8'));
-      this.push(null);
-      return false;
-    });
+      if (err) return this.emit('error', err)
+      this.push(objectmode ? doc : Buffer.from(doc, 'utf8'))
+      this.push(null)
+      return false
+    })
   }
 }
 
-function _compose(thing, types, base) {
-  if (!types) return;
-  if (!Array.isArray(types)) types = [types];
-  thing[_includes] = thing[_includes] || new Map();
+function _compose (thing, types, base) {
+  if (!types) return
+  if (!Array.isArray(types)) types = [types]
+  thing[_includes] = thing[_includes] || new Map()
   for (const type of types) {
     if (type) {
-      if (thing[_includes].get(type)) continue;
+      if (thing[_includes].get(type)) continue
       if (type[_includes]) {
         for (const include of type[_includes]) {
-          if (!(include instanceof base))
-            _compose(thing, include, base);
+          if (!(include instanceof base)) { _compose(thing, include, base) }
         }
       }
-      const props = {};
+      const props = {}
       for (const name of Object.getOwnPropertyNames(type)) {
-        if (name !== 'Builder')
-          props[name] = Object.getOwnPropertyDescriptor(type, name);
+        if (name !== 'Builder') { props[name] = Object.getOwnPropertyDescriptor(type, name) }
       }
-      Object.defineProperties(thing, props);
-      thing[_includes].set(type, true);
+      Object.defineProperties(thing, props)
+      thing[_includes].set(type, true)
     }
   }
 }
 
 class Base {
-  constructor(expanded, builder, environment) {
-    this[kEnvironment] = environment || new Environment({});
-    this[_expanded] = expanded || {};
-    this[_builder] = builder || Base.Builder;
-    models.compose_base(this, this.type);
+  constructor (expanded, builder, environment) {
+    this[kEnvironment] = environment || new Environment({})
+    this[_expanded] = expanded || {}
+    this[_builder] = builder || Base.Builder
+    models.compose_base(this, this.type)
   }
 
   /**
    * Get the unique @id of this object
    **/
-  get id() {
-    const id = this[_expanded]['@id'];
+  get id () {
+    const id = this[_expanded]['@id']
     Object.defineProperty(this, 'id', {
       enumerable: true,
       configurable: false,
       value: id
-    });
-    return id;
+    })
+    return id
   }
 
   /**
    * Get the @type(s) of this object
    **/
-  get type() {
-    const types = this[_expanded]['@type'];
-    return !types || types.length === 0 ? undefined :
-           types.length === 1 ? types[0] :
-           types;
+  get type () {
+    const types = this[_expanded]['@type']
+    return !types || types.length === 0
+      ? undefined
+      : types.length === 1
+        ? types[0]
+        : types
   }
 
   /**
    * Returns true if the given key exists in the object
    **/
-  has(key) {
-    key = as[key] || key;
-    const ret = this[_expanded][key];
-    return ret && (ret.length > 0 || typeof ret === 'boolean');
+  has (key) {
+    key = as[key] || key
+    const ret = this[_expanded][key]
+    return ret && (ret.length > 0 || typeof ret === 'boolean')
   }
 
   /**
    * Return the value of the given key
    **/
-  get(key) {
-    key = as[key] || key;
-    const nodekey = reasoner.node(key);
-    const res = this[_expanded][key] || [];
-    if (res.length === 0) return;
+  get (key) {
+    key = as[key] || key
+    const nodekey = reasoner.node(key)
+    const res = this[_expanded][key] || []
+    if (res.length === 0) return
     if (nodekey.is(asx.LanguageProperty)) {
-      const lvb = new LanguageValue.Builder();
-      for (var n = 0; n < res.length; n++) {
-        const item = res[n];
-        const language = item['@language'] || LanguageValue.SYSLANG;
-        const value = item['@value'];
-        lvb.set(language, value);
+      const lvb = new LanguageValue.Builder()
+      for (let n = 0; n < res.length; n++) {
+        const item = res[n]
+        const language = item['@language'] || LanguageValue.SYSLANG
+        const value = item['@value']
+        lvb.set(language, value)
       }
-      return lvb.get();
+      return lvb.get()
     } else {
       if (nodekey.is(owl.FunctionalProperty)) {
-        return is_literal(res[0]) ?
-            convert(res[0]) :
-            models.wrap_object(res[0], this[kEnvironment]);
+        return isLiteral(res[0])
+          ? convert(res[0])
+          : models.wrap_object(res[0], this[kEnvironment])
       } else {
-        return new ValueIterator(res, this[kEnvironment]);
+        return new ValueIterator(res, this[kEnvironment])
       }
     }
   }
@@ -302,83 +302,82 @@ class Base {
   /**
    * Export the object to a normal, 'unwrapped' JavaScript object
    **/
-  async export(options = {}) {
+  async export (options = {}) {
     if (options.useOriginalContext) {
       options.origContext =
-        this[kEnvironment].originalContext;
+        this[kEnvironment].originalContext
     }
-    const handler = options.handler || jsonld.compact;
+    const handler = options.handler || jsonld.compact
     return handler(
       this[_expanded],
       options
-    );
+    )
   }
 
-/**
+  /**
  * Export the object to an RDF/Triple string
  **/
-  async toRDF(options = {}) {
+  async toRDF (options = {}) {
     return jsonld.normalize(
       this[_expanded],
       options
-    );
+    )
   }
 
   /**
   * Write the object out to a String
   **/
-  async write(options = {}) {
-    const doc = await this.export(options);
-    return JSON.stringify(doc, null, options.space);
+  async write (options = {}) {
+    const doc = await this.export(options)
+    return JSON.stringify(doc, null, options.space)
   }
 
   /**
   * Write the object out to to a string with indenting
   **/
-  async prettyWrite(options = {}) {
-    return this.write({ space: 2, ...options });
+  async prettyWrite (options = {}) {
+    return this.write({ space: 2, ...options })
   }
 
   /**
   * Return a Readable Stream for this object
   **/
-  stream(options) {
-    return new BaseReader(this, options);
+  stream (options) {
+    return new BaseReader(this, options)
   }
 
   /**
   * Pipe this object out to the specified destination
   **/
-  pipe(dest, options) {
-    return this.stream(options).pipe(dest);
+  pipe (dest, options) {
+    return this.stream(options).pipe(dest)
   }
 
-  modify() {
-    return new this[_builder](this.type, this);
+  modify () {
+    return new this[_builder](this.type, this)
   }
 
-  template() {
-    const Builder = this[_builder];
-    const type = this.type;
-    const exp = this[_expanded];
-    const tmpl = {};
+  template () {
+    const Builder = this[_builder]
+    const type = this.type
+    const exp = this[_expanded]
+    const tmpl = {}
     for (const key of Object.keys(exp)) {
-      let value = exp[key];
-      if (Array.isArray(value))
-        value = [].concat(value);
-      tmpl[key] = value;
+      let value = exp[key]
+      if (Array.isArray(value)) { value = [].concat(value) }
+      tmpl[key] = value
     }
     return () => {
-      const bld = new Builder(type);
-      bld[_expanded] = bld[_base][_expanded] = Object.create(tmpl);
-      models.compose_builder(bld, type);
-      models.compose_base(bld[_base], type);
-      return bld;
-    };
+      const bld = new Builder(type)
+      bld[_expanded] = bld[_base][_expanded] = Object.create(tmpl)
+      models.compose_builder(bld, type)
+      models.compose_base(bld[_base], type)
+      return bld
+    }
   }
 
-  isActivity() {
-    const types = this[_expanded]['@type'];
+  isActivity () {
+    const types = this[_expanded]['@type']
 
     // Known activity types
     if (types.some(t => ACTIVITY_TYPES.includes(t))) {
@@ -398,162 +397,160 @@ class Base {
     return false
   }
 
-  * [Symbol.iterator]() {
-      for (const key of Object.keys(this[_expanded])) {
-          yield key;
-      }
-  }
-
-  [models.compose](types) {
-    if (!types) return;
-    if (!Array.isArray(types)) {
-      types = (arguments.length > 1)? Array.prototype.slice.call(arguments) : [types];
+  * [Symbol.iterator] () {
+    for (const key of Object.keys(this[_expanded])) {
+      yield key
     }
-    _compose(this, types, Base);
   }
 
-  static composedType(includes, def) {
-    if (!Array.isArray(includes))
-      includes = [includes];
+  [models.compose] (types) {
+    if (!types) return
+    if (!Array.isArray(types)) {
+      types = (arguments.length > 1) ? Array.prototype.slice.call(arguments) : [types]
+    }
+    _compose(this, types, Base)
+  }
+
+  static composedType (includes, def) {
+    if (!Array.isArray(includes)) { includes = [includes] }
     Object.setPrototypeOf(def, {
-      get [_includes]() {
-        return includes;
+      get [_includes] () {
+        return includes
       }
-    });
-    return def;
+    })
+    return def
   }
 }
 
-function setTypes(builder, types) {
-  const exp = builder[_base][_expanded];
+function setTypes (builder, types) {
+  const exp = builder[_base][_expanded]
   if (!types || (types && types.length === 0)) {
-    delete exp['@type'];
+    delete exp['@type']
   } else {
-    const ret = [];
-    if (!Array.isArray(types)) types = [types];
-    types = reasoner.reduce(types);
+    const ret = []
+    if (!Array.isArray(types)) types = [types]
+    types = reasoner.reduce(types)
     for (const type of types) {
-      ret.push(type.valueOf());
+      ret.push(type.valueOf())
     }
-    exp['@type'] = ret;
+    exp['@type'] = ret
   }
 }
 
 class BaseBuilder {
-  constructor(types, base, environment) {
-    this[_base] = base || new Base(undefined, undefined, environment);
-    setTypes(this, types);
-    models.compose_base(this[_base], types);
-    models.compose_builder(this, types);
+  constructor (types, base, environment) {
+    this[_base] = base || new Base(undefined, undefined, environment)
+    setTypes(this, types)
+    models.compose_base(this[_base], types)
+    models.compose_builder(this, types)
   }
 
-  set(key, val, options) {
-    const expanded = this[_base][_expanded];
-    options = options || {};
+  set (key, val, options) {
+    const expanded = this[_base][_expanded]
+    options = options || {}
     if (val instanceof BaseBuilder || val instanceof LanguageValue.Builder) {
-      val = val.get();
+      val = val.get()
     }
 
-    key = as[key] || key;
-    const nodekey = reasoner.node(key);
+    key = as[key] || key
+    const nodekey = reasoner.node(key)
     if (val === null || val === undefined) {
-      delete expanded[key];
-      if (expanded[key] !== undefined)
-        expanded[key] = null;
+      delete expanded[key]
+      if (expanded[key] !== undefined) { expanded[key] = null }
     } else {
-      const is_iter = is_iterable(val);
+      const isIter = isIterable(val)
       if (nodekey.is(owl.FunctionalProperty)) {
-        throwif(is_iter, 'Functional properties cannot have array values');
-        delete _expanded[key];
+        throwif(isIter, 'Functional properties cannot have array values')
+        delete _expanded[key]
       }
-      expanded[key] = expanded[key] || [];
-      if (!is_iter) val = [val];
+      expanded[key] = expanded[key] || []
+      if (!isIter) val = [val]
       for (const value of val) {
         if (nodekey.is(owl.ObjectProperty) ||
             value instanceof Base ||
             key === '@list') {
           if (value instanceof Base) {
-            expanded[key].push(value[_expanded]);
-          } else if (is_string(value)) {
-            expanded[key].push({'@id': value});
+            expanded[key].push(value[_expanded])
+          } else if (isString(value)) {
+            expanded[key].push({ '@id': value })
           } else if (typeof value === 'object') {
-            const base = new BaseBuilder();
+            const base = new BaseBuilder()
             for (const k of Object.keys(value)) {
-              const v = value[k];
-              if (k === '@id') base.id(v);
-              else if (k === '@type') base.type(v);
-              else base.set(k, v);
+              const v = value[k]
+              if (k === '@id') base.id(v)
+              else if (k === '@type') base.type(v)
+              else base.set(k, v)
             }
-            expanded[key].push(base[_expanded]);
+            expanded[key].push(base[_expanded])
           } else {
-            throw new Error('Invalid object property type');
+            throw new Error('Invalid object property type')
           }
         } else if (value instanceof LanguageValue) {
           for (const pair of value) {
             expanded[key].push({
               '@language': pair[0],
               '@value': pair[1]
-            });
+            })
           }
         } else {
           const ret = {
             '@value': value
-          };
-          if (options.lang) ret['@language'] = options.lang;
-          if (options.type) ret['@type'] = options.type;
-          expanded[key].push(ret);
+          }
+          if (options.lang) ret['@language'] = options.lang
+          if (options.type) ret['@type'] = options.type
+          expanded[key].push(ret)
         }
       }
     }
-    return this;
+    return this
   }
 
-  id(val) {
+  id (val) {
     // TODO: verify that it's an absolute IRI
-    this[_base][_expanded]['@id'] = val;
-    return this;
+    this[_base][_expanded]['@id'] = val
+    return this
   }
 
-  get() {
-    return this[_base];
+  get () {
+    return this[_base]
   }
 
-  export(options) {
-    return this.get().export(options);
+  export (options) {
+    return this.get().export(options)
   }
 
-  toRDF(options) {
-    return this.get().toRDF(options);
+  toRDF (options) {
+    return this.get().toRDF(options)
   }
 
-  write(options) {
-    return this.get().write(options);
+  write (options) {
+    return this.get().write(options)
   }
 
-  prettyWrite(options) {
-    return this.get().prettyWrite(options);
+  prettyWrite (options) {
+    return this.get().prettyWrite(options)
   }
 
-  stream(options) {
-    return this.get().stream(options);
+  stream (options) {
+    return this.get().stream(options)
   }
 
-  pipe(dest, options) {
-    return this.get().pipe(dest, options);
+  pipe (dest, options) {
+    return this.get().pipe(dest, options)
   }
 
-  template() {
-    return this.get().template();
+  template () {
+    return this.get().template()
   }
 
-  [models.compose](types) {
-    if (!types) return;
+  [models.compose] (types) {
+    if (!types) return
     if (!Array.isArray(types)) {
-      types = (arguments.length > 1)? Array.prototype.slice.call(arguments) : [types];
+      types = (arguments.length > 1) ? Array.prototype.slice.call(arguments) : [types]
     }
-    _compose(this, types, Base.Builder);
+    _compose(this, types, Base.Builder)
   }
 }
-Base.Builder = BaseBuilder;
+Base.Builder = BaseBuilder
 
-module.exports = Base;
+module.exports = Base

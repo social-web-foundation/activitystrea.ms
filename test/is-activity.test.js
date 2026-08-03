@@ -1,8 +1,7 @@
-const assert = require('assert');
-const as = require('../src/activitystreams');
+const assert = require('assert')
+const as = require('../src/activitystreams')
 
 describe('Activity type check...', async () => {
-
   it('can identify a known activity type', async () => {
     const object = await as.import({
       type: 'Create'

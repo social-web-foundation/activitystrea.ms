@@ -1,12 +1,12 @@
-'use strict';
+'use strict'
 
-const ctx = [];
+const ctx = []
 
 module.exports = {
-  add(context) {
-    ctx.push(context);
+  add (context) {
+    ctx.push(context)
   },
-  get() {
-    return ctx;
+  get () {
+    return ctx
   }
-};
+}

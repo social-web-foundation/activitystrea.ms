@@ -1,123 +1,122 @@
-'use strict';
+'use strict'
 
-const a = require('../activitystreams');
-const reasoner = require('../reasoner');
-const social = require('vocabs-social');
-const owl = require('vocabs-owl');
-const rdf = require('vocabs-rdf');
-const as = require('vocabs-as');
-const rdfs = require('vocabs-rdfs');
+const a = require('../activitystreams')
+const reasoner = require('../reasoner')
+const social = require('vocabs-social')
+const owl = require('vocabs-owl')
+const rdf = require('vocabs-rdf')
+const as = require('vocabs-as')
+const rdfs = require('vocabs-rdfs')
 
 exports.model = {
-  get Population() {
-    const ret = require('./_population');
+  get Population () {
+    const ret = require('./_population')
     Object.defineProperty(this, 'Population', {
       enumerable: true,
       configurable: false,
       value: ret
-    });
-    return ret;
+    })
+    return ret
   },
-  get Interested() {
-    const ret = require('./_interested');
+  get Interested () {
+    const ret = require('./_interested')
     Object.defineProperty(this, 'Interested', {
       enumerable: true,
       configurable: false,
       value: ret
-    });
-    return ret;
+    })
+    return ret
   },
-  get Everyone() {
-    const ret = require('./_everyone');
+  get Everyone () {
+    const ret = require('./_everyone')
     Object.defineProperty(this, 'Everyone', {
       enumerable: true,
       configurable: false,
       value: ret
-    });
-    return ret;
+    })
+    return ret
   },
-  get CompoundPopulation() {
-    const ret = require('./_compoundpopulation');
+  get CompoundPopulation () {
+    const ret = require('./_compoundpopulation')
     Object.defineProperty(this, 'CompoundPopulation', {
       enumerable: true,
       configurable: false,
       value: ret
-    });
-    return ret;
+    })
+    return ret
   },
-  get Common() {
-    const ret = require('./_common');
+  get Common () {
+    const ret = require('./_common')
     Object.defineProperty(this, 'Common', {
       enumerable: true,
       configurable: false,
       value: ret
-    });
-    return ret;
+    })
+    return ret
   }
-};
-
-function gettypes(types, type) {
-  return (types || []).concat([type]);
 }
 
-exports.population = function(types, environment) {
-  return a.object(gettypes(types, social.Population), environment);
-};
-exports.everyone = function(types, environment) {
-  return a.object(gettypes(types, social.Everyone), environment);
-};
-exports.public = function(types, environment) {
-  return a.object(gettypes(types, social.Public), environment);
-};
-exports.private = function(types, environment) {
-  return a.object(gettypes(types, social.Private), environment);
-};
-exports.direct = function(types, environment) {
-  return a.object(gettypes(types, social.Direct), environment);
-};
-exports.common = function(types, environment) {
-  return a.object(gettypes(types, social.Common), environment);
-};
-exports.interested = function(types, environment) {
-  return a.object(gettypes(types, social.Interested), environment);
-};
-exports.self = function(types, environment) {
-  return a.object(gettypes(types, social.Self), environment);
-};
-exports.all = function(types, environment) {
-  return a.object(gettypes(types, social.All), environment);
-};
-exports.any = function(types, environment) {
-  return a.object(gettypes(types, social.Any), environment);
-};
-exports.none = function(types, environment) {
-  return a.object(gettypes(types, social.None), environment);
-};
-exports.compoundPopulation = function(types, environment) {
-  return a.object(gettypes(types, social.CompoundPopulation), environment);
-};
+function gettypes (types, type) {
+  return (types || []).concat([type])
+}
 
-function social_recognizer(type) {
-  let Thing;
+exports.population = function (types, environment) {
+  return a.object(gettypes(types, social.Population), environment)
+}
+exports.everyone = function (types, environment) {
+  return a.object(gettypes(types, social.Everyone), environment)
+}
+exports.public = function (types, environment) {
+  return a.object(gettypes(types, social.Public), environment)
+}
+exports.private = function (types, environment) {
+  return a.object(gettypes(types, social.Private), environment)
+}
+exports.direct = function (types, environment) {
+  return a.object(gettypes(types, social.Direct), environment)
+}
+exports.common = function (types, environment) {
+  return a.object(gettypes(types, social.Common), environment)
+}
+exports.interested = function (types, environment) {
+  return a.object(gettypes(types, social.Interested), environment)
+}
+exports.self = function (types, environment) {
+  return a.object(gettypes(types, social.Self), environment)
+}
+exports.all = function (types, environment) {
+  return a.object(gettypes(types, social.All), environment)
+}
+exports.any = function (types, environment) {
+  return a.object(gettypes(types, social.Any), environment)
+}
+exports.none = function (types, environment) {
+  return a.object(gettypes(types, social.None), environment)
+}
+exports.compoundPopulation = function (types, environment) {
+  return a.object(gettypes(types, social.CompoundPopulation), environment)
+}
+
+function socialRecognizer (type) {
+  let Thing
   if (type) {
-    const node = reasoner.node(type);
+    const node = reasoner.node(type)
     if (node.is(social.Common)) {
-      Thing = exports.model.Common;
+      Thing = exports.model.Common
     } else if (node.is(social.Interested)) {
-      Thing = exports.model.Interested;
+      Thing = exports.model.Interested
     } else if (node.is(social.CompoundPopulation)) {
-      Thing = exports.model.CompoundPopulation;
+      Thing = exports.model.CompoundPopulation
     } else if (node.is(social.Everyone)) {
-      Thing = exports.model.Everyone;
+      Thing = exports.model.Everyone
     } else if (node.is(social.Population)) {
-      Thing = exports.model.Population;
+      Thing = exports.model.Population
     }
   }
-  return Thing;
+  return Thing
 }
 
-exports.init = function(models, reasoner, context) {
-
+exports.init = function (models, reasoner, context) {
   context.add({
     soc: 'http://ns.jasnell.me/social#',
     havingDimension: {
@@ -138,9 +137,9 @@ exports.init = function(models, reasoner, context) {
     confidence: {
       '@id': 'soc:confidence'
     }
-  });
+  })
 
-  models.use(social_recognizer);
+  models.use(socialRecognizer)
 
   const graph = new reasoner.Graph();
   [
@@ -161,13 +160,13 @@ exports.init = function(models, reasoner, context) {
       subject: pair[0],
       predicate: rdfs.subClassOf,
       object: pair[1]
-    });
-  });
+    })
+  })
 
   const functionalDatatype = [
-        owl.DatatypeProperty,
-        owl.FunctionalProperty
-      ];
+    owl.DatatypeProperty,
+    owl.FunctionalProperty
+  ];
   [
     [social.member, owl.ObjectProperty],
     [social.confidence, functionalDatatype],
@@ -180,8 +179,8 @@ exports.init = function(models, reasoner, context) {
       subject: pair[0],
       predicate: rdf.type,
       object: pair[1]
-    });
-  });
+    })
+  })
 
-  reasoner.bind(graph);
-};
+  reasoner.bind(graph)
+}

@@ -1,52 +1,52 @@
-'use strict';
+'use strict'
 
-const jsonld = require('jsonld')();
-const as = require('vocabs-as');
-const as_context = require('activitystreams-context');
-const securityContext = require('./jsig');
+const jsonld = require('jsonld')()
+const as = require('vocabs-as')
+const asContext = require('activitystreams-context')
+const securityContext = require('./jsig')
 
-const jsig_url = 'https://w3id.org/security/v1';
-const as_url_nohash = 'https://www.w3.org/ns/activitystreams';
-const default_doc_loader = jsonld.documentLoaders.node();
-const _map = Symbol('map');
+const jsigUrl = 'https://w3id.org/security/v1'
+const asUrlNohash = 'https://www.w3.org/ns/activitystreams'
+const defaultDocLoader = jsonld.documentLoaders.node()
+const _map = Symbol('map')
 
 /**
  * Creates a custom JSON-LD document loader using an internal map of
  * context objects
  **/
 class Loader {
-  constructor() {
-    this[_map] = Object.create(null);
-    this.register(as.ns, as_context);
-    this.register(as_url_nohash, as_context);
-    this.register(jsig_url, securityContext);
+  constructor () {
+    this[_map] = Object.create(null)
+    this.register(as.ns, asContext)
+    this.register(asUrlNohash, asContext)
+    this.register(jsigUrl, securityContext)
   }
-  
-  register(url, context) {
-    this[_map][url] = context;
-    return this;
+
+  register (url, context) {
+    this[_map][url] = context
+    return this
   }
-  
-  get(url) {
-    return this[_map][url];
+
+  get (url) {
+    return this[_map][url]
   }
-  
-  makeDocLoader() {
+
+  makeDocLoader () {
     return async (url) => {
-      const context = this[_map][url];
+      const context = this[_map][url]
       if (context) {
         return {
           contextUrl: null,
           document: context,
           documentUrl: url
-        };
+        }
       }
 
-      return default_doc_loader(url);
-    };
+      return defaultDocLoader(url)
+    }
   }
 }
 
-Loader.defaultInstance = new Loader();
+Loader.defaultInstance = new Loader()
 
-module.exports = Loader;
+module.exports = Loader

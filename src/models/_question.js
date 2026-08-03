@@ -1,53 +1,53 @@
-'use strict';
+'use strict'
 
-const as = require('vocabs-as');
-const Activity = require('./_activity');
-const Base = require('./_base');
-const set_date_val = require('../utils').set_date_val;
-const composedType = Base.composedType;
+const as = require('vocabs-as')
+const Activity = require('./_activity')
+const Base = require('./_base')
+const setDateVal = require('../utils').setDateVal
+const composedType = Base.composedType
 
 const Question = composedType(Activity, {
-  get anyOf() {
-    const anyOf = this.get(as.anyOf);
+  get anyOf () {
+    const anyOf = this.get(as.anyOf)
     Object.defineProperty(this, 'anyOf', {
       enumerable: true,
       configurable: false,
       value: anyOf
-    });
-    return anyOf;
+    })
+    return anyOf
   },
-  get oneOf() {
-    const oneOf = this.get(as.oneOf);
+  get oneOf () {
+    const oneOf = this.get(as.oneOf)
     Object.defineProperty(this, 'oneOf', {
       enumerable: true,
       configurable: false,
       value: oneOf
-    });
-    return oneOf;
+    })
+    return oneOf
   },
-  get closed() {
-    const closed = this.get(as.closed);
+  get closed () {
+    const closed = this.get(as.closed)
     Object.defineProperty(this, 'closed', {
       enumerable: true,
       configurable: false,
       value: closed
-    });
-    return closed;
+    })
+    return closed
   }
-});
+})
 
 const QuestionBuilder = composedType(Activity.Builder, {
-  anyOf(val) {
-    return this.set(as.anyOf, val);
+  anyOf (val) {
+    return this.set(as.anyOf, val)
   },
-  oneOf(val) {
-    return this.set(as.oneOf, val);
+  oneOf (val) {
+    return this.set(as.oneOf, val)
   },
-  closed(val) {
-    set_date_val.call(this, as.closed, val);
-    return this;
+  closed (val) {
+    setDateVal.call(this, as.closed, val)
+    return this
   }
-});
-Question.Builder = QuestionBuilder;
+})
+Question.Builder = QuestionBuilder
 
-module.exports = Question;
+module.exports = Question

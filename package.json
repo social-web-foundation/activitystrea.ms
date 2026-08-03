@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "test": "LANG= mocha ./test/ --recursive",
-    "lint": "eslint ."
+    "lint": "standard"
   },
   "dependencies": {
     "activitystreams-context": "^3.1.0",
@@ -40,12 +40,15 @@
     "@digitalbazaar/ed25519-signature-2020": "^5.2.0",
     "@digitalbazaar/ed25519-verification-key-2020": "^4.1.0",
     "@digitalbazaar/x25519-key-agreement-key-2020": "^3.0.1",
-    "@eslint/js": "^10.0.1",
     "crypto-ld": "^7.0.0",
-    "eslint": "^10.7.0",
-    "globals": "^17.9.0",
     "mocha": "^11.7.5",
+    "standard": "^17.1.2",
     "through2": "^5.0.5"
+  },
+  "standard": {
+    "env": [
+      "mocha"
+    ]
   },
   "main": "./src/activitystreams.js",
   "engines": {
