@@ -291,11 +291,6 @@ Object.defineProperties(AS2, {
     configurable: false,
     value: 'application/activity+json'
   },
-  verify: {
-    enumerable: true,
-    configurable: false,
-    value: jsonld.verify
-  },
   import: {
     enumerable: true,
     configurable: false,

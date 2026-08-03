@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - removed moment as a dependency.
 - Upgraded eslint infrastructure.
 
+### Removed
+
+- JSON-LD Signatures support; options.sign and as2.verify removed.
+
 ## [3.3.3] - 2026-05-09
 
 ### Added

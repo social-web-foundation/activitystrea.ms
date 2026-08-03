@@ -1,7 +1,6 @@
 'use strict'
 
 const jsonld = require('jsonld')()
-const jsig = require('jsonld-signatures')
 const asContext = require('activitystreams-context')
 const extContext = require('./extcontext')
 const models = require('./models')
@@ -18,7 +17,6 @@ function getContext (options) {
     let ctx = []
     const ext = extContext.get()
     if (ext) { ctx = ctx.concat(ext) }
-    if (options && options.sign) { ctx.push(jsig.SECURITY_CONTEXT_URL) }
     if (options && options.additional_context) { ctx.push(options.additional_context) }
     ctx.push(asUrlNohash)
     return { '@context': ctx.length > 1 ? ctx : ctx[0] }
@@ -35,25 +33,9 @@ class JsonLD {
 
   static async compact (expanded, options = {}) {
     const _context = getContext(options)
-    const doc = await jsonld.compact(
+    return jsonld.compact(
       expanded, _context, {}
     )
-
-    if (typeof options.sign === 'object') {
-      return jsig.sign(doc, {
-        documentLoader: jsonld.documentLoader,
-        ...options.sign
-      })
-    }
-
-    return doc
-  }
-
-  static async verify (input, options = {}) {
-    if (typeof input === 'string') {
-      input = JSON.parse(input)
-    }
-    return jsig.verify(input, options)
   }
 
   static async import (input, options = {}) {
