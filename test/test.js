@@ -857,7 +857,7 @@ describe('Streaming...', () => {
     var fs = require('fs');
     var AS2Stream = as.Stream;
     var path = require('path');
-    var through = require('through2');
+    var through = require('through2').default;
 
     fs.createReadStream(path.resolve(__dirname, 'test.json'))
       .pipe(new AS2Stream())
@@ -872,7 +872,7 @@ describe('Streaming...', () => {
 
   it('Should write to the stream', (done) => {
     var AS2Stream = as.Stream;
-    var through = require('through2');
+    var through = require('through2').default;
     var obj = as.object().name('test').get();
     obj.stream()
       .pipe(new AS2Stream())

@@ -5,7 +5,7 @@ const set_duration_val = require('../utils').set_duration_val;
 const as = require('vocabs-as');
 const ldp = require('vocabs-ldp');
 const Base = require('./_base');
-const moment = require('moment');
+const tinyduration = require('tinyduration');
 
 class AsObject extends Base {
   constructor(expanded, builder, environment) {
@@ -264,14 +264,39 @@ class AsObject extends Base {
 
   get duration() {
     const ret = this.get(as.duration);
-    const dur = ret === undefined ? undefined :
-                moment.duration(isNaN(ret)?ret:(ret*1000));
+    const props = ["years", "months", "weeks", "days", "hours", "minutes", "seconds", "milliseconds", "microseconds", "nanoseconds"]
+    const dur = ret === undefined
+        ? undefined
+        : typeof(ret) == 'string'
+          ? tinyduration.parse(ret)
+          : typeof(ret) == 'number'
+            ? { seconds: ret }
+            : undefined;
+    if (dur) {
+      if ("seconds" in dur && !Number.isInteger(dur["seconds"])) {
+        const msec = Math.round(dur["seconds"] * 1000);
+        dur["milliseconds"] = msec % 1000;
+        dur["seconds"] = Math.floor(msec / 1000);
+      }
+      const neg = "negative" in dur;
+      if (neg) {
+        delete dur["negative"];
+      }
+      for (let prop of props) {
+        if (!(prop in dur)) {
+          dur[prop] = 0;
+        }
+        if (neg && dur[prop] !== 0) {
+          dur[prop] = -1 * dur[prop];
+        }
+      }
+    }
     Object.defineProperty(this, 'duration', {
       enumerable: true,
       configurable: false,
       value: dur
     });
-    return dur;
+    return Object.freeze(dur);
   }
 
   get inbox() {

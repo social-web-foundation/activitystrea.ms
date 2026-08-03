@@ -1,6 +1,6 @@
 'use strict';
 
-const moment = require('moment');
+const tinyduration = require('tinyduration');
 const xsd = require('vocabs-xsd');
 const _toString = {}.toString;
 
@@ -70,11 +70,10 @@ class Utils {
   static set_duration_val(key, val) {
     Utils.throwif(
       isNaN(val) &&
-      !Utils.is_string(val) &&
-      typeof val.humanize === 'undefined',
+      !Utils.is_string(val),
       `${key} must be a number or a string`);
     val = !isNaN(val) ?
-      moment.duration(val * 1000).toString() :
+      tinyduration.serialize({seconds: val}) :
       val.toString();
     this.set(key, val, {type: xsd.duration});
   }

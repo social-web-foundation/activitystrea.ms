@@ -22,7 +22,6 @@
     "activitystreams-context": "^3.1.0",
     "jsonld": "^9.0.0",
     "jsonld-signatures": "^11.1.0",
-    "moment": "^2.29.4",
     "readable-stream": "^4.3.0",
     "reasoner": "^3.0.0",
     "rfc5646": "^3.0.0",
