@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   properties as [Temporal.Duration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal/Duration). This might become
   a Temporal.Duration in a future version.
 - removed moment as a dependency.
+- Upgraded eslint infrastructure.
 
 ## [3.3.3] - 2026-05-09
 
