@@ -5,7 +5,6 @@ const reasoner = require('../reasoner');
 const LanguageValue = require('./_languagevalue');
 const models = require('../models');
 const jsonld = require('../jsonld');
-const moment = require('moment');
 const as = require('vocabs-as');
 const asx = require('vocabs-asx');
 const xsd = require('vocabs-xsd');
@@ -124,7 +123,7 @@ function convert(item) {
     } else if (node.is(xsd.duration)) {
       // do nothing
     } else if (node.is(asx.Date)) {
-      value = moment(value);
+      value = new Date(value);
     }else if (node.is(asx.Boolean)) {
       value = value !== 'false';
     }

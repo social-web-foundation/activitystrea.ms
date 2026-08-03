@@ -18,6 +18,10 @@ describe('Basics...', () => {
     assert.equal(object.content.get('fr'), 'foo');
     assert.equal(object.name.get('de'), 'baz');
     assert.equal(object.summary.get('es'), 'bar');
+    assert(object.endTime instanceof Date);
+    assert(object.startTime instanceof Date);
+    assert(object.published instanceof Date);
+    assert(object.updated instanceof Date);
     assert.equal(object.endTime.toISOString(), nowiso);
     assert.equal(object.startTime.toISOString(), nowiso);
     assert.equal(object.published.toISOString(), nowiso);
@@ -524,6 +528,7 @@ describe('Basics...', () => {
     assert.equal(doc.context.length, 1);
     assert.equal(doc.context.first.id, 'http://example.org/context');
     assert.equal(doc.name.get(), 'the display name');
+    assert(doc.endTime instanceof Date);
     assert.equal(doc.endTime.valueOf(), new Date('2015-12-12T12:12:12Z').valueOf());
     assert(doc.generator);
     assert.equal(doc.generator.length, 1);
@@ -546,7 +551,9 @@ describe('Basics...', () => {
     assert(doc.tag);
     assert.equal(doc.tag.length, 1);
     assert.equal(doc.tag.first.id, 'http://example.org/tag');
+    assert(doc.updated instanceof Date);
     assert.equal(doc.updated.valueOf(), new Date('2015-12-12T12:12:12Z').valueOf());
+    assert(doc.published instanceof Date);
     assert.equal(doc.published.valueOf(), new Date('2015-12-12T12:12:12Z').valueOf());
     assert(doc.replies);
     assert.equal(doc.replies.length, 1);
@@ -557,6 +564,7 @@ describe('Basics...', () => {
     assert(doc.url);
     assert.equal(doc.url.length, 1);
     assert.equal(doc.url.first.id, 'http://example.org');
+    assert(doc.startTime instanceof Date);
     assert.equal(doc.startTime.valueOf(), new Date('2015-12-12T12:12:12Z').valueOf());
     assert(doc.to);
     assert.equal(doc.to.length, 1);
@@ -612,6 +620,7 @@ describe('Basics...', () => {
       assert.equal(doc.context.length, 1);
       assert.equal(doc.context.first.id, 'http://example.org/context');
       assert.equal(doc.name.get(), 'the display name');
+      assert(doc.endTime instanceof Date);
       assert.equal(doc.endTime.valueOf(),
         new Date('2015-12-12T12:12:12Z').valueOf());
       assert(doc.generator);
@@ -635,8 +644,10 @@ describe('Basics...', () => {
       assert(doc.tag);
       assert.equal(doc.tag.length, 1);
       assert.equal(doc.tag.first.id, 'http://example.org/tag');
+      assert(doc.updated instanceof Date);
       assert.equal(doc.updated.valueOf(),
         new Date('2015-12-12T12:12:12Z').valueOf());
+      assert(doc.published instanceof Date);
       assert.equal(doc.published.valueOf(),
         new Date('2015-12-12T12:12:12Z').valueOf());
       assert(doc.replies);
@@ -648,6 +659,7 @@ describe('Basics...', () => {
       assert(doc.url);
       assert.equal(doc.url.length, 1);
       assert.equal(doc.url.first.id, 'http://example.org');
+      assert(doc.startTime instanceof Date);
       assert.equal(doc.startTime.valueOf(),
         new Date('2015-12-12T12:12:12Z').valueOf());
       assert(doc.to);

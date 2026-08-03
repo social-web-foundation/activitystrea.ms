@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Date-valued properties (`published`, `updated`, `startTime`,
+  `endTime`, `deleted`, `closed`) return plain `Date` objects instead of
+  moment instances. Builder date setters accept only `Date` (or anything
+  `Object.prototype.toString`-tagged as a Date); moment objects are now
+  rejected with a `must be a date` error, and invalid dates throw at set
+  time instead of being silently stored.
+
 ## [3.3.3] - 2026-05-09
 
 ### Added

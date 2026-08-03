@@ -36,8 +36,7 @@ class Utils {
 
   static is_date(val) {
     return val instanceof Date ||
-           _toString.apply(val) === '[object Date]' ||
-           moment.isMoment(val);
+           _toString.apply(val) === '[object Date]';
   }
 
   static is_integer(val) {
@@ -50,7 +49,7 @@ class Utils {
 
   static set_date_val(key, val) {
     Utils.throwif(!Utils.is_date(val), `${key} must be a date`);
-    const fmt = moment.isMoment(val) ? val.format() : val.toISOString();
+    const fmt = val.toISOString();
     this.set(key, fmt, {type: xsd.dateTime});
   }
 

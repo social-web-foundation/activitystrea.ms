@@ -387,19 +387,19 @@ class AsObjectBuilder extends Base.Builder {
   }
 
   endTimeNow() {
-    return this.endTime(moment.utc());
+    return this.endTime(new Date());
   }
 
   startTimeNow() {
-    return this.startTime(moment.utc());
+    return this.startTime(new Date());
   }
 
   publishedNow() {
-    return this.published(moment.utc());
+    return this.published(new Date());
   }
 
   updatedNow() {
-    return this.updated(moment.utc());
+    return this.updated(new Date());
   }
 
   generator(val) {
