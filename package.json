@@ -26,6 +26,7 @@
     "readable-stream": "^4.3.0",
     "reasoner": "^3.0.0",
     "rfc5646": "^3.0.0",
+    "tinyduration": "^3.4.1",
     "vocabs-as": "^3.0.0",
     "vocabs-asx": "^0.11.1",
     "vocabs-interval": "^0.11.1",
