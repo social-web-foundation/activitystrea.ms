@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - removed moment as a dependency.
 - Upgraded eslint infrastructure.
 - Update "engines" to LTS 22 so we can use ESM modules.
+- replace rfc5646 with bcp-47-match.
 
 ### Removed
 

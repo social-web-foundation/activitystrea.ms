@@ -1,7 +1,12 @@
 'use strict'
 
-const LanguageTag = require('rfc5646')
+const { lookup, basicFilter } = require('bcp-47-match')
 const _map = Symbol('map')
+
+// BCP 47 tags are case-insensitive; map keys are stored lowercased
+function canonical (lang) {
+  return String(lang).toLowerCase()
+}
 
 class LanguageValue {
   constructor (map) {
@@ -10,24 +15,20 @@ class LanguageValue {
 
   get (lang) {
     if (!lang) return this.get(LanguageValue.SYSLANG)
-    const checktag = new LanguageTag(lang)
-    if (this[_map].has(checktag.toString())) { return this[_map].get(checktag.toString()) }
-    for (const pair of this[_map]) {
-      const key = new LanguageTag(pair[0])
-      if (checktag === '*' ||
-          key.suitableFor(checktag) ||
-          checktag.suitableFor(key)) { return pair[1] }
-    }
+    const key = canonical(lang)
+    if (this[_map].has(key)) { return this[_map].get(key) }
+    const tags = [...this[_map].keys()]
+    const hit = lookup(tags, lang) || basicFilter(tags, lang)[0]
+    if (hit !== undefined) { return this[_map].get(hit) }
   }
 
   has (lang) {
-    if (!lang) return this.get(LanguageValue.SYSLANG)
-    const checktag = new LanguageTag(lang)
-    return this[_map].has(checktag)
+    if (!lang) return this.has(LanguageValue.SYSLANG)
+    return this[_map].has(canonical(lang))
   }
 
   * [Symbol.iterator] () {
-    for (const pair of this[_map]) { yield [pair[0].toString(), pair[1]] }
+    for (const pair of this[_map]) { yield [pair[0], pair[1]] }
   }
 
   valueOf (lang) {
@@ -45,7 +46,7 @@ class LanguageValueBuilder {
       value = lang
       lang = LanguageValue.SYSLANG
     }
-    this[_map].set(new LanguageTag(lang).toString(), value)
+    this[_map].set(canonical(lang), value)
     return this
   }
 
