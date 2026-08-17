@@ -3,9 +3,9 @@
 const jsonld = require('jsonld')()
 const as = require('vocabs-as')
 const asContext = require('activitystreams-context')
-const securityContext = require('./jsig')
+const securityContext = require('./contexts/security-v1.json')
 
-const jsigUrl = 'https://w3id.org/security/v1'
+const securityUrl = 'https://w3id.org/security/v1'
 const asUrlNohash = 'https://www.w3.org/ns/activitystreams'
 const defaultDocLoader = (jsonld.documentLoaders.node)
   ? jsonld.documentLoaders.node()
@@ -23,7 +23,7 @@ class Loader {
     this[_map] = Object.create(null)
     this.register(as.ns, asContext)
     this.register(asUrlNohash, asContext)
-    this.register(jsigUrl, securityContext)
+    this.register(securityUrl, securityContext)
   }
 
   register (url, context) {
