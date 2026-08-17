@@ -7,6 +7,16 @@ import tinyduration from 'tinyduration'
 const setDateVal = Utils.setDateVal
 const setDurationVal = Utils.setDurationVal
 
+function parseRet (ret) {
+  let dur
+  try {
+    dur = tinyduration.parse(ret)
+  } catch (err) {
+    dur = undefined
+  }
+  return dur
+}
+
 class AsObject extends Base {
   constructor (expanded, builder, environment) {
     super(expanded, builder || AsObject.Builder, environment)
@@ -268,7 +278,7 @@ class AsObject extends Base {
     const dur = ret === undefined
       ? undefined
       : typeof (ret) === 'string'
-        ? tinyduration.parse(ret)
+        ? parseRet(ret)
         : typeof (ret) === 'number'
           ? { seconds: ret }
           : undefined

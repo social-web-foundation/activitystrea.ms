@@ -59,6 +59,11 @@ describe('Duration...', () => {
     assert.strictEqual(doc.duration, undefined)
   })
 
+  it('returns undefined for a malformed duration string', async () => {
+    const d = await importDuration('banana')
+    assert.strictEqual(d, undefined)
+  })
+
   it('returns a frozen object', async () => {
     const d = await importDuration('PT1H')
     assert(Object.isFrozen(d))
