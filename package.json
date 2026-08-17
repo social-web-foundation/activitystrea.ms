@@ -15,7 +15,7 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "test": "LANG= mocha ./test/ --recursive",
+    "test": "LANG=en_US.UTF-8 mocha ./test/ --recursive",
     "lint": "standard"
   },
   "dependencies": {
