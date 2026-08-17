@@ -1,6 +1,6 @@
 const assert = require('assert')
 const as = require('../src/activitystreams')
-const models = require('../src/models')
+const models = require('../src/models/models.js')
 const asv = require('vocabs-as')
 const now = new Date()
 const nowiso = now.toISOString()

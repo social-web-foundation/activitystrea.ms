@@ -2,7 +2,7 @@
 
 const vocab = require('../vocab')
 const LanguageValue = require('./_languagevalue')
-const models = require('../models')
+const models = require('./models.js')
 const jsonld = require('../jsonld')
 const as = require('vocabs-as')
 const utils = require('../utils')

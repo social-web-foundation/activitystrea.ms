@@ -3,7 +3,7 @@
 const jsonld = require('./jsonld')
 const Loader = require('./contextloader')
 const as = require('vocabs-as')
-const models = require('./models')
+const models = require('./models/models.js')
 
 function _types (types, additional) {
   types = types || []

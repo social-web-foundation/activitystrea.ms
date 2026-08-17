@@ -2,7 +2,7 @@
 
 const jsonld = require('jsonld')()
 const asContext = require('activitystreams-context')
-const models = require('./models')
+const models = require('./models/models.js')
 const Environment = require('./environment')
 const Loader = require('./contextloader')
 const asUrlNohash = 'https://www.w3.org/ns/activitystreams'
