@@ -7,7 +7,11 @@ const securityContext = require('./jsig')
 
 const jsigUrl = 'https://w3id.org/security/v1'
 const asUrlNohash = 'https://www.w3.org/ns/activitystreams'
-const defaultDocLoader = jsonld.documentLoaders.node()
+const defaultDocLoader = (jsonld.documentLoaders.node)
+  ? jsonld.documentLoaders.node()
+  : (jsonld.documentLoaders.xhr)
+      ? jsonld.documentLoaders.xhr()
+      : null
 const _map = Symbol('map')
 
 /**

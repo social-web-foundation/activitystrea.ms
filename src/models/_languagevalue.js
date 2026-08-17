@@ -56,9 +56,11 @@ class LanguageValueBuilder {
 }
 
 LanguageValue.SYSLANG =
-  process.env.LANG
+  (typeof process !== 'undefined' && process.env.LANG)
     ? process.env.LANG.split('.')[0].replace('_', '-')
-    : 'en-US'
+    : (typeof navigator !== 'undefined')
+        ? navigator.language
+        : 'en-US'
 
 LanguageValue.Builder = LanguageValueBuilder
 
