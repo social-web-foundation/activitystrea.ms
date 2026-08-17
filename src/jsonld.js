@@ -2,7 +2,6 @@
 
 const jsonld = require('jsonld')()
 const asContext = require('activitystreams-context')
-const extContext = require('./extcontext')
 const models = require('./models')
 const Environment = require('./environment')
 const Loader = require('./contextloader')
@@ -14,9 +13,7 @@ function getContext (options) {
   if (options.useOriginalContext && options.origContext) {
     return { '@context': options.origContext }
   } else {
-    let ctx = []
-    const ext = extContext.get()
-    if (ext) { ctx = ctx.concat(ext) }
+    const ctx = []
     if (options && options.additional_context) { ctx.push(options.additional_context) }
     ctx.push(asUrlNohash)
     return { '@context': ctx.length > 1 ? ctx : ctx[0] }

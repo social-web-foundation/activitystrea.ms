@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - JSON-LD Signatures support; options.sign and as2.verify removed.
 - `interval` and `social` extensions.
+- extension mechanism (`use()` and `extend()`).
 
 ## [3.3.3] - 2026-05-09
 

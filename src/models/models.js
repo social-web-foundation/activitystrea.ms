@@ -4,7 +4,7 @@ const as = require('vocabs-as')
 const reasoner = require('../reasoner')
 const _compose = Symbol('compose')
 
-let cache = Object.create(null)
+const cache = Object.create(null)
 
 function coreRecognizer (type) {
   let thing
@@ -33,19 +33,14 @@ function coreRecognizer (type) {
   return thing
 }
 
-let recognizers = [coreRecognizer]
-
 function recognize (type) {
   let thing = cache[type]
   if (thing !== undefined) return thing
-  for (const recognizer of recognizers) {
-    thing = recognizer(type)
-    if (thing !== undefined) {
-      cache[type] = thing
-      return thing
-    }
+  thing = coreRecognizer(type)
+  if (thing !== undefined) {
+    cache[type] = thing
   }
-  return undefined
+  return thing
 }
 
 module.exports = exports = {
@@ -224,11 +219,5 @@ module.exports = exports = {
       ? exports.Link
       : exports.Object
     return new Thing(expanded, undefined, environment)
-  },
-
-  use (recognizer) {
-    if (typeof recognizer !== 'function') { throw new Error('Recognizer must be a function') }
-    recognizers = [recognizer].concat(recognizers)
-    cache = Object.create(null)
   }
 }

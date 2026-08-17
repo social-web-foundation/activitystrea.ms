@@ -1,9 +1,7 @@
 'use strict'
 
-const reasoner = require('./reasoner')
 const jsonld = require('./jsonld')
 const Loader = require('./contextloader')
-const extContext = require('./extcontext')
 const as = require('vocabs-as')
 const models = require('./models')
 
@@ -18,10 +16,6 @@ function _types (types, additional) {
 }
 
 class AS2 {
-  static use (extension) {
-    if (extension && typeof extension.init === 'function') { extension.init(models, reasoner, extContext) }
-  }
-
   static registerContext (url, context) {
     Loader.defaultInstance.register(url, context)
   }
