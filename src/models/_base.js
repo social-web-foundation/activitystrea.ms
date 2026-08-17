@@ -1,14 +1,11 @@
 'use strict'
 
 const Readable = require('readable-stream').Readable
-const reasoner = require('../reasoner')
+const vocab = require('../vocab')
 const LanguageValue = require('./_languagevalue')
 const models = require('../models')
 const jsonld = require('../jsonld')
 const as = require('vocabs-as')
-const asx = require('vocabs-asx')
-const xsd = require('vocabs-xsd')
-const owl = require('vocabs-owl')
 const utils = require('../utils')
 const Environment = require('../environment')
 const kEnvironment = Environment.environment
@@ -116,17 +113,16 @@ function isIterable (item) {
 function convert (item) {
   const type = item['@type']
   let value = item['@value']
-  if (type) {
-    const node = reasoner.node(type)
-    if (node.is(asx.Number)) {
+  switch (vocab.literalKind(type)) {
+    case 'number':
       value = Number(value)
-    } else if (node.is(xsd.duration)) {
-      // do nothing
-    } else if (node.is(asx.Date)) {
+      break
+    case 'date':
       value = new Date(value)
-    } else if (node.is(asx.Boolean)) {
+      break
+    case 'boolean':
       value = value !== 'false'
-    }
+      break
   }
   return value
 }
@@ -276,10 +272,9 @@ class Base {
    **/
   get (key) {
     key = as[key] || key
-    const nodekey = reasoner.node(key)
     const res = this[_expanded][key] || []
     if (res.length === 0) return
-    if (nodekey.is(asx.LanguageProperty)) {
+    if (vocab.isLanguageProperty(key)) {
       const lvb = new LanguageValue.Builder()
       for (let n = 0; n < res.length; n++) {
         const item = res[n]
@@ -289,7 +284,7 @@ class Base {
       }
       return lvb.get()
     } else {
-      if (nodekey.is(owl.FunctionalProperty)) {
+      if (vocab.isFunctional(key)) {
         return isLiteral(res[0])
           ? convert(res[0])
           : models.wrap_object(res[0], this[kEnvironment])
@@ -429,7 +424,7 @@ function setTypes (builder, types) {
   } else {
     const ret = []
     if (!Array.isArray(types)) types = [types]
-    types = reasoner.reduce(types)
+    types = vocab.reduce(types)
     for (const type of types) {
       ret.push(type.valueOf())
     }
@@ -453,20 +448,19 @@ class BaseBuilder {
     }
 
     key = as[key] || key
-    const nodekey = reasoner.node(key)
     if (val === null || val === undefined) {
       delete expanded[key]
       if (expanded[key] !== undefined) { expanded[key] = null }
     } else {
       const isIter = isIterable(val)
-      if (nodekey.is(owl.FunctionalProperty)) {
+      if (vocab.isFunctional(key)) {
         throwif(isIter, 'Functional properties cannot have array values')
         delete _expanded[key]
       }
       expanded[key] = expanded[key] || []
       if (!isIter) val = [val]
       for (const value of val) {
-        if (nodekey.is(owl.ObjectProperty) ||
+        if (vocab.isObjectProperty(key) ||
             value instanceof Base ||
             key === '@list') {
           if (value instanceof Base) {

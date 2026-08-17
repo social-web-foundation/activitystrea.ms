@@ -1,33 +1,32 @@
 'use strict'
 
 const as = require('vocabs-as')
-const reasoner = require('../reasoner')
+const vocab = require('../vocab')
 const _compose = Symbol('compose')
 
 const cache = Object.create(null)
 
 function coreRecognizer (type) {
   let thing
-  const node = reasoner.node(type)
-  if (node.is(as.OrderedCollectionPage)) {
+  if (vocab.isA(type, as.OrderedCollectionPage)) {
     thing = exports.OrderedCollectionPage
-  } else if (node.is(as.CollectionPage)) {
+  } else if (vocab.isA(type, as.CollectionPage)) {
     thing = exports.CollectionPage
-  } else if (node.is(as.OrderedCollection)) {
+  } else if (vocab.isA(type, as.OrderedCollection)) {
     thing = exports.OrderedCollection
-  } else if (node.is(as.Collection)) {
+  } else if (vocab.isA(type, as.Collection)) {
     thing = exports.Collection
-  } else if (node.is(as.Question)) {
+  } else if (vocab.isA(type, as.Question)) {
     thing = exports.Question
-  } else if (node.is(as.Activity)) {
+  } else if (vocab.isA(type, as.Activity)) {
     thing = exports.Activity
-  } else if (node.is(as.Profile)) {
+  } else if (vocab.isA(type, as.Profile)) {
     thing = exports.Profile
-  } else if (node.is(as.Place)) {
+  } else if (vocab.isA(type, as.Place)) {
     thing = exports.Place
-  } else if (node.is(as.Relationship)) {
+  } else if (vocab.isA(type, as.Relationship)) {
     thing = exports.Relationship
-  } else if (node.is(as.Tombstone)) {
+  } else if (vocab.isA(type, as.Tombstone)) {
     thing = exports.Tombstone
   }
   return thing
@@ -190,7 +189,7 @@ module.exports = exports = {
   },
 
   compose_builder (builder, types) {
-    types = reasoner.reduce(types || [])
+    types = vocab.reduce(types || [])
     for (const type of types) {
       const Thing = recognize(type)
       if (Thing) { builder[_compose](Thing.Builder) }
@@ -198,7 +197,7 @@ module.exports = exports = {
   },
 
   compose_base (base, types) {
-    types = reasoner.reduce(types || [])
+    types = vocab.reduce(types || [])
     for (const type of types) {
       const Thing = recognize(type)
       if (Thing) { base[_compose](Thing) }
@@ -206,11 +205,10 @@ module.exports = exports = {
   },
 
   wrap_object (expanded, environment) {
-    const types = reasoner.reduce(expanded['@type'] || [])
+    const types = vocab.reduce(expanded['@type'] || [])
     let isLink = false
     for (const type of types) {
-      const nodetype = reasoner.node(type)
-      if (nodetype.is(as.Link)) {
+      if (vocab.isA(type, as.Link)) {
         isLink = true
         break
       }
