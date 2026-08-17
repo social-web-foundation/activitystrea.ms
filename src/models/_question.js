@@ -1,9 +1,9 @@
-'use strict'
+import as from 'vocabs-as'
+import Activity from './_activity.js'
+import Base from './_base.js'
+import Utils from '../utils.js'
 
-const as = require('vocabs-as')
-const Activity = require('./_activity')
-const Base = require('./_base')
-const setDateVal = require('../utils').setDateVal
+const setDateVal = Utils.setDateVal
 const composedType = Base.composedType
 
 const Question = composedType(Activity, {
@@ -50,4 +50,4 @@ const QuestionBuilder = composedType(Activity.Builder, {
 })
 Question.Builder = QuestionBuilder
 
-module.exports = Question
+export default Question

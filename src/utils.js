@@ -1,7 +1,6 @@
-'use strict'
+import tinyduration from 'tinyduration'
+import xsd from 'vocabs-xsd'
 
-const tinyduration = require('tinyduration')
-const xsd = require('vocabs-xsd')
 const _toString = {}.toString
 
 class Utils {
@@ -78,4 +77,4 @@ class Utils {
   }
 }
 
-module.exports = Utils
+export default Utils

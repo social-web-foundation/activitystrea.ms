@@ -14,9 +14,10 @@
     "url": "git+https://github.com/social-web-foundation/activitystrea.ms.git"
   },
   "license": "Apache-2.0",
+  "type": "module",
   "scripts": {
     "test": "LANG=en_US.UTF-8 mocha ./test/ --recursive",
-    "test:bundle": "node scripts/browser-smoke.js",
+    "test:bundle": "node scripts/browser-smoke.cjs",
     "lint": "standard"
   },
   "dependencies": {
@@ -38,6 +39,9 @@
   "standard": {
     "env": [
       "mocha"
+    ],
+    "ignore": [
+      "src/contexts/contexts.js"
     ]
   },
   "main": "./src/activitystreams.js",

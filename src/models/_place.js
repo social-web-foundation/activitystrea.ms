@@ -1,10 +1,10 @@
-'use strict'
+import Utils from '../utils.js'
+import as from 'vocabs-as'
+import xsd from 'vocabs-xsd'
+import Base from './_base.js'
 
-const range = require('../utils').range
-const throwif = require('../utils').throwif
-const as = require('vocabs-as')
-const xsd = require('vocabs-xsd')
-const Base = require('./_base')
+const range = Utils.range
+const throwif = Utils.throwif
 const composedType = Base.composedType
 
 const Place = composedType(undefined, {
@@ -97,4 +97,4 @@ const PlaceBuilder = composedType(undefined, {
 
 Place.Builder = PlaceBuilder
 
-module.exports = Place
+export default Place

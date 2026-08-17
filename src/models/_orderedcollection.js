@@ -1,7 +1,6 @@
-'use strict'
+import Collection from './_collection.js'
+import Base from './_base.js'
 
-const Collection = require('./_collection')
-const Base = require('./_base')
 const composedType = Base.composedType
 
 const OrderedCollection = composedType(Collection, {})
@@ -14,4 +13,4 @@ const OrderedCollectionBuilder = composedType(Collection.Builder, {
 
 OrderedCollection.Builder = OrderedCollectionBuilder
 
-module.exports = OrderedCollection
+export default OrderedCollection

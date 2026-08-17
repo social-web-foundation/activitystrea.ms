@@ -1,10 +1,10 @@
-'use strict'
+import jsonldFactory from 'jsonld'
+import { asContext } from './contexts/contexts.js'
+import models from './models/models.js'
+import Environment from './environment.js'
+import Loader from './contextloader.js'
 
-const jsonld = require('jsonld')()
-const asContext = require('activitystreams-context')
-const models = require('./models/models.js')
-const Environment = require('./environment')
-const Loader = require('./contextloader')
+const jsonld = jsonldFactory()
 const asUrlNohash = 'https://www.w3.org/ns/activitystreams'
 
 jsonld.documentLoader = Loader.defaultInstance.makeDocLoader()
@@ -60,4 +60,4 @@ class JsonLD {
   }
 }
 
-module.exports = JsonLD
+export default JsonLD

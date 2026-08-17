@@ -1,9 +1,9 @@
-'use strict'
+import Utils from '../utils.js'
+import as from 'vocabs-as'
+import xsd from 'vocabs-xsd'
+import Base from './_base.js'
 
-const range = require('../utils').range
-const as = require('vocabs-as')
-const xsd = require('vocabs-xsd')
-const Base = require('./_base')
+const range = Utils.range
 
 class Link extends Base {
   constructor (expanded, builder, environment) {
@@ -130,4 +130,4 @@ class LinkBuilder extends Base.Builder {
 }
 Link.Builder = LinkBuilder
 
-module.exports = Link
+export default Link

@@ -1,10 +1,8 @@
-'use strict'
+import jsonldFactory from 'jsonld'
+import as from 'vocabs-as'
+import { asContext, securityContext } from './contexts/contexts.js'
 
-const jsonld = require('jsonld')()
-const as = require('vocabs-as')
-const asContext = require('activitystreams-context')
-const securityContext = require('./contexts/security-v1.json')
-
+const jsonld = jsonldFactory()
 const securityUrl = 'https://w3id.org/security/v1'
 const asUrlNohash = 'https://www.w3.org/ns/activitystreams'
 const defaultDocLoader = (jsonld.documentLoaders.node)
@@ -53,4 +51,4 @@ class Loader {
 
 Loader.defaultInstance = new Loader()
 
-module.exports = Loader
+export default Loader

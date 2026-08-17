@@ -1,15 +1,15 @@
-'use strict'
+import vocab from '../vocab.js'
+import LanguageValue from './_languagevalue.js'
+import models from './models.js'
+import jsonld from '../jsonld.js'
+import as from 'vocabs-as'
+import Utils from '../utils.js'
+import Environment from '../environment.js'
+import { compose } from './compose.js'
 
-const vocab = require('../vocab')
-const LanguageValue = require('./_languagevalue')
-const models = require('./models.js')
-const jsonld = require('../jsonld')
-const as = require('vocabs-as')
-const utils = require('../utils')
-const Environment = require('../environment')
 const kEnvironment = Environment.environment
-const throwif = utils.throwif
-const isString = utils.isString
+const throwif = Utils.throwif
+const isString = Utils.isString
 
 const _expanded = Symbol('expanded')
 const _base = Symbol('base')
@@ -356,7 +356,7 @@ class Base {
     }
   }
 
-  [models.compose] (types) {
+  [compose] (types) {
     if (!types) return
     if (!Array.isArray(types)) {
       types = (arguments.length > 1) ? Array.prototype.slice.call(arguments) : [types]
@@ -487,7 +487,7 @@ class BaseBuilder {
     return this.get().template()
   }
 
-  [models.compose] (types) {
+  [compose] (types) {
     if (!types) return
     if (!Array.isArray(types)) {
       types = (arguments.length > 1) ? Array.prototype.slice.call(arguments) : [types]
@@ -497,4 +497,4 @@ class BaseBuilder {
 }
 Base.Builder = BaseBuilder
 
-module.exports = Base
+export default Base

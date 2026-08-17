@@ -1,11 +1,11 @@
-'use strict'
+import Utils from '../utils.js'
+import as from 'vocabs-as'
+import ldp from 'vocabs-ldp'
+import Base from './_base.js'
+import tinyduration from 'tinyduration'
 
-const setDateVal = require('../utils').setDateVal
-const setDurationVal = require('../utils').setDurationVal
-const as = require('vocabs-as')
-const ldp = require('vocabs-ldp')
-const Base = require('./_base')
-const tinyduration = require('tinyduration')
+const setDateVal = Utils.setDateVal
+const setDurationVal = Utils.setDurationVal
 
 class AsObject extends Base {
   constructor (expanded, builder, environment) {
@@ -510,4 +510,4 @@ class AsObjectBuilder extends Base.Builder {
 }
 AsObject.Builder = AsObjectBuilder
 
-module.exports = AsObject
+export default AsObject

@@ -1,8 +1,7 @@
-'use strict'
+import as from 'vocabs-as'
+import Collection from './_collection.js'
+import Base from './_base.js'
 
-const as = require('vocabs-as')
-const Collection = require('./_collection')
-const Base = require('./_base')
 const composedType = Base.composedType
 
 const CollectionPage = composedType(Collection, {
@@ -49,4 +48,4 @@ const CollectionPageBuilder = composedType(Collection.Builder, {
 
 CollectionPage.Builder = CollectionPageBuilder
 
-module.exports = CollectionPage
+export default CollectionPage

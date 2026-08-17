@@ -1,7 +1,6 @@
-'use strict'
+import as from 'vocabs-as'
+import Loader from './contextloader.js'
 
-const as = require('vocabs-as')
-const Loader = require('./contextloader')
 const _input = Symbol('input')
 const _origcontext = Symbol('originalContext')
 const _defcontext = Symbol('defaultContext')
@@ -86,4 +85,4 @@ Object.defineProperty(Environment, 'environment', {
   value: Symbol('environment')
 })
 
-module.exports = Environment
+export default Environment

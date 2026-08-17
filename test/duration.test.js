@@ -1,5 +1,5 @@
-const assert = require('assert')
-const as = require('../src/activitystreams')
+import assert from 'node:assert'
+import as from '../src/activitystreams.js'
 
 // The post-moment contract: `duration` is a frozen plain object with the
 // same numeric properties as a Temporal.Duration, zeros filled in, no

@@ -1,9 +1,8 @@
-'use strict'
-const as = require('vocabs-as')
-const asx = require('vocabs-asx')
-const ldp = require('vocabs-ldp')
-const rdf = require('vocabs-rdf')
-const xsd = require('vocabs-xsd')
+import as from 'vocabs-as'
+import asx from 'vocabs-asx'
+import ldp from 'vocabs-ldp'
+import rdf from 'vocabs-rdf'
+import xsd from 'vocabs-xsd'
 
 const FUNCTIONAL_OBJECT_PROPERTIES = [
   as.describes, as.subject, as.first, rdf.rest, as.partOf, as.current,
@@ -167,4 +166,4 @@ function literalKind (iri) {
   return LITERAL_KINDS.get(iri)
 }
 
-module.exports = { isA, reduce, isFunctional, isLanguageProperty, isObjectProperty, isSubPropertyOf, literalKind }
+export default { isA, reduce, isFunctional, isLanguageProperty, isObjectProperty, isSubPropertyOf, literalKind }

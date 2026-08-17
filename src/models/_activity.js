@@ -1,8 +1,7 @@
-'use strict'
+import Base from './_base.js'
+import as from 'vocabs-as'
 
-const Base = require('./_base')
 const composedType = Base.composedType
-const as = require('vocabs-as')
 
 const Activity = composedType(undefined, {
   get actor () {
@@ -90,4 +89,4 @@ const ActivityBuilder = composedType(undefined, {
 
 Activity.Builder = ActivityBuilder
 
-module.exports = Activity
+export default Activity

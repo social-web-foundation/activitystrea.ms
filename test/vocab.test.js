@@ -1,9 +1,9 @@
-const assert = require('assert')
-const as = require('vocabs-as')
-const asx = require('vocabs-asx')
-const xsd = require('vocabs-xsd')
-const ldp = require('vocabs-ldp')
-const vocab = require('../src/vocab')
+import assert from 'node:assert'
+import as from 'vocabs-as'
+import asx from 'vocabs-asx'
+import xsd from 'vocabs-xsd'
+import ldp from 'vocabs-ldp'
+import vocab from '../src/vocab.js'
 
 // The vocab tables module: the reasoner replacement. Static,
 // question-specific lookups over the core AS2 vocabulary — no OWL graph,

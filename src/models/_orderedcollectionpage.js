@@ -1,11 +1,11 @@
-'use strict'
+import as from 'vocabs-as'
+import xsd from 'vocabs-xsd'
+import Utils from '../utils.js'
+import CollectionPage from './_collectionpage.js'
+import OrderedCollection from './_orderedcollection.js'
+import Base from './_base.js'
 
-const as = require('vocabs-as')
-const xsd = require('vocabs-xsd')
-const range = require('../utils').range
-const CollectionPage = require('./_collectionpage')
-const OrderedCollection = require('./_orderedcollection')
-const Base = require('./_base')
+const range = Utils.range
 const composedType = Base.composedType
 
 const OrderedCollectionPage =
@@ -38,4 +38,4 @@ const OrderedCollectionPageBuilder =
     })
 OrderedCollectionPage.Builder = OrderedCollectionPageBuilder
 
-module.exports = OrderedCollectionPage
+export default OrderedCollectionPage

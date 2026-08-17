@@ -1,6 +1,5 @@
-'use strict'
+import { lookup, basicFilter } from 'bcp-47-match'
 
-const { lookup, basicFilter } = require('bcp-47-match')
 const _map = Symbol('map')
 
 // BCP 47 tags are case-insensitive; map keys are stored lowercased
@@ -64,4 +63,4 @@ LanguageValue.SYSLANG =
 
 LanguageValue.Builder = LanguageValueBuilder
 
-module.exports = LanguageValue
+export default LanguageValue

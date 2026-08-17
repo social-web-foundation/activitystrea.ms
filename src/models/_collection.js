@@ -1,10 +1,10 @@
-'use strict'
+import Utils from '../utils.js'
+import Base from './_base.js'
+import as from 'vocabs-as'
+import xsd from 'vocabs-xsd'
 
-const range = require('../utils').range
-const throwif = require('../utils').throwif
-const Base = require('./_base')
-const as = require('vocabs-as')
-const xsd = require('vocabs-xsd')
+const range = Utils.range
+const throwif = Utils.throwif
 const composedType = Base.composedType
 const _ordered = Symbol('ordered')
 const _items = Symbol('items')
@@ -112,4 +112,4 @@ const CollectionBuilder = composedType(undefined, {
 
 Collection.Builder = CollectionBuilder
 
-module.exports = Collection
+export default Collection

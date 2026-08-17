@@ -1,8 +1,7 @@
-'use strict'
+import Base from './_base.js'
+import as from 'vocabs-as'
 
-const Base = require('./_base')
 const composedType = Base.composedType
-const as = require('vocabs-as')
 
 const Relationship = composedType(undefined, {
   get subject () {
@@ -47,4 +46,4 @@ const RelationshipBuilder = composedType(undefined, {
 })
 Relationship.Builder = RelationshipBuilder
 
-module.exports = Relationship
+export default Relationship

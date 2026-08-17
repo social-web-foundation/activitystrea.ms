@@ -1,7 +1,6 @@
-'use strict'
+import as from 'vocabs-as'
+import Base from './_base.js'
 
-const as = require('vocabs-as')
-const Base = require('./_base')
 const composedType = Base.composedType
 
 const Profile = composedType(undefined, {
@@ -24,4 +23,4 @@ const ProfileBuilder = composedType(undefined, {
 
 Profile.Builder = ProfileBuilder
 
-module.exports = Profile
+export default Profile

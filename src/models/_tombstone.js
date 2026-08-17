@@ -1,9 +1,9 @@
-'use strict'
+import as from 'vocabs-as'
+import AsObject from './_object.js'
+import Base from './_base.js'
+import Utils from '../utils.js'
 
-const as = require('vocabs-as')
-const AsObject = require('./_object')
-const Base = require('./_base')
-const setDateVal = require('../utils').setDateVal
+const setDateVal = Utils.setDateVal
 const composedType = Base.composedType
 
 const Tombstone = composedType(AsObject, {
@@ -38,4 +38,4 @@ const TombstoneBuilder = composedType(AsObject.Builder, {
 })
 Tombstone.Builder = TombstoneBuilder
 
-module.exports = Tombstone
+export default Tombstone

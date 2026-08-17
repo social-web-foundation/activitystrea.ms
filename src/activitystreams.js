@@ -1,9 +1,7 @@
-'use strict'
-
-const jsonld = require('./jsonld')
-const Loader = require('./contextloader')
-const as = require('vocabs-as')
-const models = require('./models/models.js')
+import jsonld from './jsonld.js'
+import Loader from './contextloader.js'
+import as from 'vocabs-as'
+import models from './models/models.js'
 
 function _types (types, additional) {
   types = types || []
@@ -262,4 +260,5 @@ Object.defineProperties(AS2, {
   }
 })
 
-module.exports = AS2
+export default AS2
+export { AS2 as 'module.exports' }

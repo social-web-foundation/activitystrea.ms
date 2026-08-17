@@ -1,5 +1,5 @@
-const assert = require('assert')
-const as = require('../src/activitystreams')
+import assert from 'node:assert'
+import as from '../src/activitystreams.js'
 
 describe('Register context...', () => {
   const url = 'https://example.com/context'

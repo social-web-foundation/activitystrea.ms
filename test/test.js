@@ -1,7 +1,9 @@
-const assert = require('assert')
-const as = require('../src/activitystreams')
-const models = require('../src/models/models.js')
-const asv = require('vocabs-as')
+import assert from 'node:assert'
+import as from '../src/activitystreams.js'
+import models from '../src/models/models.js'
+import LanguageValue from '../src/models/_languagevalue.js'
+import asv from 'vocabs-as'
+
 const now = new Date()
 const nowiso = now.toISOString()
 
@@ -220,7 +222,6 @@ describe('Basics...', () => {
   })
 
   it('should handle languages properly', async () => {
-    const LanguageValue = require('../src/models/_languagevalue')
     LanguageValue.SYSLANG = 'en-US'
     const B = new LanguageValue.Builder()
     B.set('en-US', 'bar')

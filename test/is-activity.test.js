@@ -1,5 +1,5 @@
-const assert = require('assert')
-const as = require('../src/activitystreams')
+import assert from 'node:assert'
+import as from '../src/activitystreams.js'
 
 describe('Activity type check...', async () => {
   it('can identify a known activity type', async () => {
