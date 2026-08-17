@@ -36,6 +36,7 @@ jobs:
       run: npm run test
 
     - name: Browser bundle smoke test
+      if: matrix.node-version == 26
       run: npm run test:bundle
 
   publish-npm:
