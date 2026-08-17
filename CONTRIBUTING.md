@@ -1,5 +1,4 @@
-CONTRIBUTING
-============
+# CONTRIBUTING
 
 1. Fork this repository.
 2. Work on your changes within a topic branch.
@@ -7,14 +6,27 @@ CONTRIBUTING
 
 Pull requests are accepted under the discretion of the project maintainer(s).  Improve the chances your PR will be merged by following the requirements and guidelines below.
 
-**GUIDELINES**
+## GUIDELINES
+
 - Make sure your pull contains quality code.  We will certainly provide constructive feedback on works in progress but we will not merge incomplete pull requests.
 - Make sure your pull has automated tests.
 - Make sure your pull is fully documented.
 - Reference related Github Issues within commit comments and pull request comment where appropriate.
 - Squash out minor or "typo" commits in your pull using `git commit -a` or `git rebase -i`.
 
-**BUGS**
+## AI
+
+We recommend reviewing the [Software Freedom Conservancy Recommendations
+When Using LLM-backed Generative AI
+Systems for FOSS Contributions](https://sfconservancy.org/llm-gen-ai/llm-backed-generative-ai-recommendations.html). For this project, we ask:
+
+- Only humans open issues and PRs.
+- Only humans reply to comments and reviews.
+- Use the 'Assisted-By' header to identify AI-supported changes.
+- Humans are responsible for all changes made under their name.
+- Humans assert that all changes they submit meet license requirements.
+
+## BUGS
 
 File bugs or feature requests using Github Issue Tracker.
 
