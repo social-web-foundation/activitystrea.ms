@@ -244,26 +244,6 @@ class AS2 {
     return AS2.link(_types(types, as.Mention), environment)
   }
 
-  static get interval () {
-    const interval = require('./interval')
-    Object.defineProperty(AS2, 'interval', {
-      configurable: false,
-      enumerable: true,
-      value: interval
-    })
-    return interval
-  }
-
-  static get social () {
-    const social = require('./social')
-    Object.defineProperty(AS2, 'social', {
-      configurable: false,
-      enumerable: true,
-      value: social
-    })
-    return social
-  }
-
   static get Stream () {
     const stream = require('./stream')
     Object.defineProperty(this, 'Stream', {

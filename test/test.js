@@ -2,8 +2,6 @@ const assert = require('assert')
 const as = require('../src/activitystreams')
 const models = require('../src/models')
 const asv = require('vocabs-as')
-const social = require('vocabs-social')
-const interval = require('vocabs-interval')
 const now = new Date()
 const nowiso = now.toISOString()
 
@@ -898,61 +896,6 @@ describe('Templates...', () => {
 })
 
 describe('Extensions...', () => {
-  it('should initialize the Interval and Social Extensions', (done) => {
-    as.use(as.interval)
-    as.use(as.social)
-    assert.equal(require('../src/extcontext.js').get().length, 2)
-    done()
-  })
-
-  it('should create interval objects with appropriate type and values',
-    (done) => {
-      [
-        ['open', interval.OpenInterval],
-        ['closed', interval.ClosedInterval],
-        ['openClosed', interval.OpenClosedInterval],
-        ['closedOpen', interval.ClosedOpenInterval],
-        ['leftOpen', interval.LeftOpenInterval],
-        ['rightOpen', interval.RightOpenInterval],
-        ['leftClosed', interval.LeftClosedInterval],
-        ['rightClosed', interval.RightClosedInterval]
-      ].forEach((key) => {
-        const obj = as.interval[key[0]]()
-          .upper(1)
-          .lower(0)
-          .step(1)
-          .get()
-        assert(obj instanceof as.models.Object)
-        assert.equal(obj.type, key[1])
-        assert.equal(obj.upper, 1)
-        assert.equal(obj.lower, 0)
-        assert.equal(obj.step, 1)
-      })
-      done()
-    })
-
-  it('should create population objects with appropriate type', (done) => {
-    [
-      ['population', social.Population],
-      ['everyone', social.Everyone],
-      ['public', social.Public],
-      ['private', social.Private],
-      ['direct', social.Direct],
-      ['common', social.Common],
-      ['interested', social.Interested],
-      ['self', social.Self],
-      ['all', social.All],
-      ['any', social.Any],
-      ['none', social.None],
-      ['compoundPopulation', social.CompoundPopulation]
-    ].forEach((key) => {
-      const obj = as.social[key[0]]().get()
-      assert(obj instanceof as.models.Object)
-      assert.equal(obj.type, key[1])
-    })
-    done()
-  })
-
   it('should allow using .set() when the @context is an array', async () => {
     const string = await as.activity()
       .context([

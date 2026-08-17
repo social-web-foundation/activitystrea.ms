@@ -27,12 +27,10 @@
     "tinyduration": "^3.4.1",
     "vocabs-as": "^3.0.0",
     "vocabs-asx": "^0.11.1",
-    "vocabs-interval": "^0.11.1",
     "vocabs-ldp": "^0.1.0",
     "vocabs-owl": "^0.11.1",
     "vocabs-rdf": "^0.11.1",
     "vocabs-rdfs": "^0.11.1",
-    "vocabs-social": "^0.11.1",
     "vocabs-xsd": "^0.11.1"
   },
   "devDependencies": {
