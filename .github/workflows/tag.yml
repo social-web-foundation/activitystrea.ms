@@ -39,8 +39,29 @@ jobs:
       if: matrix.node-version == 26
       run: npm run test:bundle
 
+  browserCheck:
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v6
+
+    - uses: actions/setup-node@v6
+      with:
+        node-version: 26
+        cache: npm
+        cache-dependency-path: package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps chromium firefox webkit
+
+    - name: Run browser check
+      run: npm run test:browser
+
   publish-npm:
-    needs: runTests
+    needs: [runTests, browserCheck]
     runs-on: ubuntu-latest
 
     permissions:
