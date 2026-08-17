@@ -1,6 +1,6 @@
 {
   "name": "activitystrea.ms",
-  "version": "4.0.0-dev.0",
+  "version": "4.0.0",
   "description": "Activity Streams 2.0 JavaScript Implementation",
   "author": "Evan Prodromou <evanp@socialweb.foundation>",
   "contributors": [
