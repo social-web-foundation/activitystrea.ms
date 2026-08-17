@@ -16,6 +16,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "test": "LANG=en_US.UTF-8 mocha ./test/ --recursive",
+    "test:bundle": "node scripts/browser-smoke.js",
     "lint": "standard"
   },
   "dependencies": {
@@ -30,6 +31,7 @@
     "vocabs-xsd": "^0.11.1"
   },
   "devDependencies": {
+    "esbuild": "^0.28.2",
     "mocha": "^11.7.5",
     "standard": "^17.1.2"
   },
