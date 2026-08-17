@@ -2,8 +2,8 @@
 
 Based on:
 
-* http://www.w3.org/TR/activitystreams-core
-* http://www.w3.org/TR/activitystreams-vocabulary
+* [Activity Streams 2.0 Core](http://www.w3.org/TR/activitystreams-core)
+* [Activity Vocabulary](http://www.w3.org/TR/activitystreams-vocabulary)
 
 ## Getting Started
 
@@ -59,6 +59,7 @@ const doc = await as.create()
 ```
 
 Which produces the output:
+
 ```json
 {
   "@context": "https://www.w3.org/ns/activitystreams",
@@ -149,7 +150,6 @@ been built, call the `get` method to return the generated object.
 * `as.place([types])`
 * `as.mention([types])`
 * `as.tombstone([types])`
-
 
 The object returned by `get()` is a read-only view of the Activity Stream
 object. It will have property methods that are specific to the object's type.
@@ -466,8 +466,8 @@ Set to a constant value of `application/activity+json`
 
 `as.models.Base` is the base class for all objects. It is not intended to be used directly by developers.
 
- * `expanded` - The underlying JSON-LD expanded JavaScript object
- * `builder` - A `as.model.Base.Builder` subclass
+* `expanded` - The underlying JSON-LD expanded JavaScript object
+* `builder` - A `as.model.Base.Builder` subclass
 
 #### Property: `<string> as.models.Base.prototype.id`
 
@@ -673,7 +673,7 @@ Builder for `as.models.Object` instances.
 
 Adds a value to the `https://www.w3.org/ns/activitystreams#attachment` property.
 
-#### Method: `<Builder> as.models.Object.Builder.prototype.attributedTo(val)'
+#### Method: `<Builder> as.models.Object.Builder.prototype.attributedTo(val)`
 
 Adds a value to the `https://www.w3.org/ns/activitystreams#attributedTo` property.
 
