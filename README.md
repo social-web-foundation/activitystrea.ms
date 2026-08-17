@@ -1,8 +1,3 @@
-## Modifications
-
-As required by the Apache license:
-Please note that all files dated 01/01/2021 & newer have been modified from the original...
-
 # Activity Streams 2.0
 
 Based on:
@@ -10,12 +5,15 @@ Based on:
 * http://www.w3.org/TR/activitystreams-core
 * http://www.w3.org/TR/activitystreams-vocabulary
 
-Includes experimental support for:
-
-* http://ns.jasnell.me/interval
-* http://ns.jasnell.me/social
-
 ## Getting Started
+
+### Requirements
+
+Version 4 is an ES module and requires Node.js 22.12 or later. CommonJS
+consumers on those versions can still load it with a plain `require()`.
+The library also runs in browsers: it bundles cleanly with standard
+tooling (esbuild, webpack, etc.) and is tested in Chromium, Firefox, and
+WebKit.
 
 ### Installation
 
@@ -24,17 +22,17 @@ Includes experimental support for:
 ### Usage
 
 ```javascript
-const as = require('activitystrea.ms');
+import as from 'activitystrea.ms'
 
 // Create a simple object
-const doc = await as.object().
-  name('baz').
-  content(
+const doc = await as.object()
+  .name('baz')
+  .content(
     as.langmap()
       .set('en', 'bar')
-      .set('fr', 'foo')).
-  publishedNow().
-  prettyWrite();
+      .set('fr', 'foo'))
+  .publishedNow()
+  .prettyWrite()
 ```
 
 Which produces the output:
@@ -54,10 +52,10 @@ Which produces the output:
 
 ```javascript
 // Create a simple activity
-const doc = await as.create().
-  actor('acct:sally@example.org').
-  object('http://www.example.org/post').
-  prettyWrite();
+const doc = await as.create()
+  .actor('acct:sally@example.org')
+  .object('http://www.example.org/post')
+  .prettyWrite()
 ```
 
 Which produces the output:
@@ -70,28 +68,24 @@ Which produces the output:
 }
 ```
 
-You can also use the Node.js stream model for parsing:
-```javascript
-const fs = require('fs');
-const AS2Stream = as.Stream;
-const path = require('path');
-const through = require('through2');
+To parse a received Activity Streams 2.0 document, use `as.import()`:
 
-fs.createReadStream(path.resolve(__dirname,'test.json'))
-  .pipe(new AS2Stream())
-  .pipe(through.obj((obj,encoding,callback) => {
-    console.log(obj.type);
-    console.log(obj.name);
-  }));
-```
-And writing:
 ```javascript
-const as = require('activitystrea.ms');
-const through = require('through2');
-as.object()
-  .name('test')
-  .get()
-  .pipe(process.stdout);
+import as from 'activitystrea.ms'
+
+const obj = await as.import({
+  '@context': 'https://www.w3.org/ns/activitystreams',
+  type: 'Create',
+  actor: 'https://social.example/sally',
+  object: {
+    type: 'Note',
+    content: 'Hello, world!'
+  }
+})
+
+console.log(obj.type)
+console.log(obj.actor.first.id)
+console.log(obj.object.first.content.get())
 ```
 
 The API uses a fluent factory pattern for creating AS objects. There are
@@ -115,7 +109,6 @@ been built, call the `get` method to return the generated object.
 * `as.arrive([types])`
 * `as.create([types])`
 * `as.delete([types])`
-* `as.favorite([types])`
 * `as.follow([types])`
 * `as.ignore([types])`
 * `as.join([types])`
@@ -138,12 +131,13 @@ been built, call the `get` method to return the generated object.
 * `as.flag([types])`
 * `as.dislike([types])`
 * `as.application([types])`
-* `as.content([types])`
 * `as.group([types])`
 * `as.person([types])`
+* `as.organization([types])`
 * `as.service([types])`
 * `as.article([types])`
 * `as.document([types])`
+* `as.relationship([types])`
 * `as.profile([types])`
 * `as.audio([types])`
 * `as.image([types])`
@@ -153,28 +147,8 @@ been built, call the `get` method to return the generated object.
 * `as.question([types])`
 * `as.event([types])`
 * `as.place([types])`
-* `as.connection([types])`
 * `as.mention([types])`
 * `as.tombstone([types])`
-* `as.interval([types])`
-* `as.interval.open([types])`
-* `as.interval.closed([types])`
-* `as.interval.openClosed([types])`
-* `as.interval.closedOpen([types])`
-* `as.interval.rightOpen([types])`
-* `as.interval.leftClosed([types])`
-* `as.interval.rightClosed([types])`
-* `as.social.population([types])`
-* `as.social.everyone([types])`
-* `as.social.public([types])`
-* `as.social.private([types])`
-* `as.social.direct([types])`
-* `as.social.common([types])`
-* `as.social.interested([types])`
-* `as.social.self([types])`
-* `as.social.all([types])`
-* `as.social.any([types])`
-* `as.social.none([types])`
 
 
 The object returned by `get()` is a read-only view of the Activity Stream
@@ -183,72 +157,63 @@ You can export the built object as an ordinary Javascript object using the
 `export` method. This will generate a JSON-LD compliant Javascript object.
 
 ```javascript
-const as = require('activitystrea.ms');
+import as from 'activitystrea.ms'
 
-const note = as.note().
-               name('foo').
-               content('this is a simple note').
-               get();
-
-console.log(note.name.valueOf());
-console.log(note.content.valueOf());
-console.log(note.type);
-```
-
-```javascript
-const as = require('activitystrea.ms');
-
-as.note().
-   name('foo').
-   content('this is a simple note').
-   get().
-   export((err, obj) => {
-     if (err) throw err;
-     // obj is an ordinary javascript object
-     console.log(obj['@type']);
-     console.log(obj['name']);
-     console.log(obj['content']);
-   });
-```
-
-To serialize the Activity Streams object out as JSON, use the `write`,
-`prettyWrite`, or `pipe` methods
-
-```javascript
-const as = require('activitystrea.ms');
-
-const doc = await as.note().
-   name('foo').
-   content('this is a simple note').
-   write();
-```
-
-```javascript
-const as = require('activitystrea.ms');
-
-const doc = await as.note().
-   name('foo').
-   content('this is a simple note').
-   prettyWrite();
-```
-
-```javascript
-const as = require('activitystrea.ms');
-const through = require('through2');
-as.object()
-  .name('test')
+const note = as.note()
+  .name('foo')
+  .content('this is a simple note')
   .get()
-  .pipe(process.stdout);
+
+console.log(note.name.valueOf())
+console.log(note.content.valueOf())
+console.log(note.type)
 ```
 
-Note that The `export`, `write`, and `prettyWrite` methods are all async and return promises.
+```javascript
+import as from 'activitystrea.ms'
+
+const obj = await as.note()
+  .name('foo')
+  .content('this is a simple note')
+  .get()
+  .export()
+
+// obj is an ordinary javascript object
+console.log(obj.type)
+console.log(obj.name)
+console.log(obj.content)
+```
+
+To serialize the Activity Streams object out as JSON, use the `write` or
+`prettyWrite` methods
+
+```javascript
+import as from 'activitystrea.ms'
+
+const doc = await as.note()
+  .name('foo')
+  .content('this is a simple note')
+  .write()
+```
+
+```javascript
+import as from 'activitystrea.ms'
+
+const doc = await as.note()
+  .name('foo')
+  .content('this is a simple note')
+  .prettyWrite()
+```
+
+Note that the `export`, `write`, and `prettyWrite` methods are all async and return promises.
 This is largely because of the JSON-LD processing that's happening under the covers.
 
 ## API
 
-### `const as = require('activitystrea.ms')`
+### `import as from 'activitystrea.ms'`
 
-The base module.
+The base module. (CommonJS consumers on Node 22.12+ can use
+`const as = require('activitystrea.ms')` instead.)
 
 #### `<as.models.Object.Builder> as.object([types])`
 
@@ -463,48 +428,34 @@ Returns a new `as.models.Link.Builder` instance generating an `http://www.w3.org
 Returns a new `as.models.Tombstone.Builder` instance generating an
 `http://www.w3.org/ns/activity#Tombstone` object.
 
-#### `<void> as.import(obj, callback)`
+#### `<Promise<as.models.Object>> as.import(obj[, options])`
 
-Imports the specified JavaScript object `obj`, performing JSON-LD expansion as necessary. When the import is complete, the `callback` function will be invoked with the imported `as.model.Object` as the second argument. If an error occurs, the error will be passed as the first argument to the `callback`.
+Imports the specified JavaScript object `obj`, performing JSON-LD expansion as necessary. Returns a promise that resolves to the imported `as.models.Object`.
 
 ```javascript
-var obj = {
+const obj = {
   '@context': 'https://www.w3.org/ns/activitystreams',
-  '@type': 'Person',
+  type: 'Person',
   name: 'Joe'
-};
-as.import(obj, (err, imp) => {
-  if (err) throw err;
-  console.log(imp.type);
-});
+}
+const imp = await as.import(obj)
+console.log(imp.type)
 ```
 
-#### `as.Stream()`
+#### `<void> as.registerContext(url, context)`
 
-Returns a new Node.js Transform Stream that parses JSON input into an appropriate `as.models.Object` instance.
-
-```javascript
-const through = require('through2');
-const fs = require('fs');
-const fsstr = fs.createReadStream('data.json');
-fsstr.pipe(new as.Stream())
-     .pipe(through.obj((chunk,encoding,callback) => {
-        console.log(chunk.name);
-        callback();
-     }));
-```
-
-#### `as.Middleware`
-
-Express/Connect middleware that parses the request payload as AS2
+Registers a JSON-LD context document for offline resolution. When an
+imported document's `@context` includes the registered URL, the local copy
+is used instead of fetching it over the network. The AS2 context and
+`https://w3id.org/security/v1` are pre-registered.
 
 ```javascript
-const app = require('express')();
-app.post('/', as.Middleware, (req,res) => {
-  res.status(200);
-  res.set({'Content-Type': as.mediaType});
-  req.body.pipe(res);
-});
+as.registerContext('https://example.com/context', {
+  '@context': {
+    ex: 'https://example.com/context#',
+    bar: 'ex:bar'
+  }
+})
 ```
 
 #### `as.mediaType`
@@ -539,12 +490,10 @@ Returns the value for the specified `key`. The return value will vary based on t
 Exports the object by performing a JSON-LD compaction. If export fails, the promise will reject with the error. If the export succeeds, the promise will resolve with the exported JavaScript object.
 
 ```javascript
-const obj = as.object().name('Joe').get();
-obj.export((err,exp) => {
-  if (err) throw err;
-  console.log(exp.name);
-  console.log(exp['@type']);
-});
+const obj = as.object().name('Joe').get()
+const exp = await obj.export()
+console.log(exp.name)
+console.log(exp.type)
 ```
 
 #### Method: `<Promise> as.models.Base.prototype.write([options])`
@@ -552,51 +501,36 @@ obj.export((err,exp) => {
 Write the object out to a JSON-LD string. If writing fails, the promise will reject with the error. If the write succeeds, the promise will resolve with the JSON-LD string.
 
 ```javascript
-const obj = as.object().name('Joe').get();
-obj.write((err,string) => {
-  if (err) throw err;
-  console.log(string);
-});
+const obj = as.object().name('Joe').get()
+const string = await obj.write()
+console.log(string)
 ```
 
 #### Method: `<Promise> as.models.Base.prototype.prettyWrite([options])`
 
-Write the object out to a JSON-LD string. If writing fails, the promise will reject with the error. If the write succeeds, the promise will resolve with the JSON-LD string.
+Write the object out to an indented JSON-LD string. If writing fails, the promise will reject with the error. If the write succeeds, the promise will resolve with the JSON-LD string.
 
 ```javascript
-const obj = as.object().name('Joe').get();
-obj.prettyWrite((err,string) => {
-  if (err) throw err;
-  console.log(string);
-});
+const obj = as.object().name('Joe').get()
+const string = await obj.prettyWrite()
+console.log(string)
 ```
 
 #### Method: `<as.models.Base.Builder<?>> as.models.Base.prototype.modify()`
 
 Returns a new `as.models.Base.Builder` instance that can be used to modify
-this object.
-
-#### Method: `<ReadableStream> as.models.Base.prototype.stream()`
-
-Returns a Readable Stream instance that can be used to read this object as a stream of JSON-LD data.
-
-#### Method: `<ReadableStream> as.models.Base.prototype.pipe(Writable[, options])`
-
-Pipes this objects JSON-LD to the specified writable
-
-```javascript
-const obj = as.person().name('Sally').get();
-obj.pipe(process.stdout);
-```
+this object. Note that model objects memoize property values on first
+access, so `modify()` should only be used on objects that have not been
+read from yet.
 
 #### Method: `<function> as.models.Base.prototype.template()`
 
-Returns a funtion that can be used to create new `as.models.Base.Builder` instances using this object as a template. The new Builder will be pre-filled with the properties already specified on this object.
+Returns a function that can be used to create new `as.models.Base.Builder` instances using this object as a template. The new Builder will be pre-filled with the properties already specified on this object.
 
 ```javascript
-const templ = as.like().actor('http://example.org/sally').get().template();
-templ().object('http://example.org/1').pipe(process.stdout);
-templ().object('http://example.org/2').pipe(process.stdout);
+const templ = as.like().actor('http://example.org/sally').get().template()
+const like1 = await templ().object('http://example.org/1').prettyWrite()
+const like2 = await templ().object('http://example.org/2').prettyWrite()
 ```
 
 ### Class: `as.models.Base.Builder(types, base)`
@@ -613,8 +547,8 @@ Set the value of the `@id` property. Calling this repeatedly will overwrite the 
 Set a value for the specified key.
 
 ```javascript
-const object = as.object();
-object.set('foo', 'bar');
+const object = as.object()
+object.set('foo', 'bar')
 ```
 
 #### Method: `<as.models.Base> as.models.Base.Builder.prototype.get()`
@@ -721,6 +655,16 @@ Returns the value of the `https://www.w3.org/ns/activitystreams#cc` property. Wi
 
 Returns the value of the `https://www.w3.org/ns/activitystreams#bcc` property. Will be either `undefined` or an Iterable  of `as.model.Base` instances.
 
+#### Property: `as.models.Object.prototype.duration`
+
+Returns the value of the `https://www.w3.org/ns/activitystreams#duration` property. Will be either `undefined` or a frozen plain object with the same numeric properties as a `Temporal.Duration`: `years`, `months`, `weeks`, `days`, `hours`, `minutes`, `seconds`, `milliseconds`, `microseconds`, and `nanoseconds`. All properties are always present, with `0` for unspecified units. Negative durations have negative values. Malformed duration strings yield `undefined`.
+
+```javascript
+const doc = await as.import({ type: 'Video', duration: 'PT1H30M' })
+console.log(doc.duration.hours) // 1
+console.log(doc.duration.minutes) // 30
+```
+
 ### Class: `as.models.Object.Builder > as.models.Base.Builder`
 
 Builder for `as.models.Object` instances.
@@ -739,20 +683,20 @@ Sets an optional language-tagged value for the `https://www.w3.org/ns/activityst
 language-tagged values, use the `as.langmap` method to create a
 LanguageValue.Builder.
 
-```
+```javascript
 as.object()
   .content('simple content')
-  .get();
+  .get()
 ```
 
-```
+```javascript
 as.object()
   .content(
     as.langmap()
       .set('default content')
       .set('es', 'other content')
   )
-  .get();
+  .get()
 ```
 
 #### Method: `<Builder> as.models.Object.Builder.prototype.context(val)`
@@ -763,40 +707,40 @@ Adds a value to the `https://www.w3.org/ns/activitystreams#context` property.
 
 Sets an optional language-tagged value for the `https://www.w3.org/ns/activitystreams#name` property.
 
-```
+```javascript
 as.object()
   .name('simple display name')
-  .get();
+  .get()
 ```
 
-```
+```javascript
 as.object()
   .name(
     as.langmap()
       .set('default display name')
       .set('es', 'other display name')
   )
-  .get();
+  .get()
 ```
 
 #### Method: `<Builder> as.models.Object.Builder.prototype.summary(val)`
 
 Sets an optional language-tagged value for the `https://www.w3.org/ns/activitystreams#summary` property.
 
-```
+```javascript
 as.object()
   .summary('simple summary')
-  .get();
+  .get()
 ```
 
-```
+```javascript
 as.object()
   .summary(
     as.langmap()
       .set('default summary')
       .set('es', 'other summary')
   )
-  .get();
+  .get()
 ```
 
 #### Method: `<Builder> as.models.Object.Builder.prototype.endTime(val)`
@@ -890,6 +834,12 @@ Adds a value to the `https://www.w3.org/ns/activitystreams#cc` property.
 #### Method: `<Builder> as.models.Object.Builder.prototype.bcc(val)`
 
 Adds a value to the `https://www.w3.org/ns/activitystreams#bcc` property.
+
+#### Method: `<Builder> as.models.Object.Builder.prototype.duration(val)`
+
+Sets the value of the `https://www.w3.org/ns/activitystreams#duration` property.
+The value is either a number of seconds or an ISO 8601 duration string
+(e.g. `'PT1H30M'`).
 
 ### Class: `as.models.Activity > as.models.Object`
 
@@ -1065,7 +1015,7 @@ Returns the value of the `https://www.w3.org/ns/activitystreams#name` property a
 
 #### Property: `as.models.Link.prototype.hreflang`
 
-Returns the value of the `https://www.w3.org/ns/activitystreams#hreflang` property. The value will either be `undefined` or an RFC 5646 Language Tag.
+Returns the value of the `https://www.w3.org/ns/activitystreams#hreflang` property. The value will either be `undefined` or a BCP 47 Language Tag.
 
 #### Property: `as.models.Link.prototype.height`
 
@@ -1074,10 +1024,6 @@ Returns the value of the `https://www.w3.org/ns/activitystreams#height` property
 #### Property: `as.models.Link.prototype.width`
 
 Returns the value of the `https://www.w3.org/ns/activitystreams#width` property.The value will either be `undefined` or a numeric integer greater than or equal to zero.
-
-#### Property: `as.models.Link.prototype.duration`
-
-Returns the value of the `https://www.w3.org/ns/activitystreams#duration` property. The value will either be `undefined, a numeric integer, or an ISO 8601 duration string.
 
 ### Class: `as.models.Link.Builder > as.models.Base.Builder`
 
@@ -1099,26 +1045,26 @@ Sets the value of the `https://www.w3.org/ns/activitystreams#mediaType` property
 
 Specifies an optionally language-tagged name.
 
-```
+```javascript
 as.link()
   .name('simple display name')
-  .get();
+  .get()
 ```
 
-```
+```javascript
 as.link()
   .name(
     as.langmap()
       .set('default display name')
       .set('es', 'other display name')
   )
-  .get();
+  .get()
 ```
 
 #### Method: `<Builder> as.models.Link.Builder.prototype.hreflang(val)`
 
 Sets the value of the `https://www.w3.org/ns/activitystreams#hreflang` property.
-The value must be an RFC 5646 Language Tag.
+The value must be a BCP 47 Language Tag.
 
 #### Method: `<Builder> as.models.Link.Builder.prototype.height(val)`
 
@@ -1129,12 +1075,6 @@ The value is a numeric integer greater than or equal to zero.
 
 Sets the value of the `https://www.w3.org/ns/activitystreams#width` property.
 The value is a numeric integer greater than or equal to zero.
-
-#### Method: `<Builder> as.models.Link.Builder.prototype.duration(val)`
-
-Sets the value of the `https://www.w3.org/ns/activitystreams#duration` property.
-The value is either a numeric integer indicate a number of seconds, or an
-ISO 8601 Duration.
 
 ### Class: `as.models.Place > as.models.Object`
 
@@ -1296,29 +1236,35 @@ Specifies the former type of the object that was deleted.
 Used to encapsulate language tagged properties within an Activity Streams document.
 
 ```javascript
-// assuming the default system locale is  `en-US`:
+// assuming the default system locale is `en-US`:
 const obj = as.object()
   .name(
     as.langmap()
       .set('default display name')
       .set('es', 'other display name')
   )
-  .get();
-const languagevalue = obj.name;
-console.log(languagevalue.get()); // 'default display name'
-console.log(languagevalue.get('es')); // 'other display name'
+  .get()
+const languagevalue = obj.name
+console.log(languagevalue.get()) // 'default display name'
+console.log(languagevalue.get('es')) // 'other display name'
 ```
 
 ```javascript
-// assuming the default system locale is  `sp`:
+// assuming the default system locale is `es`:
 const obj = as.object()
   .name(
     as.langmap()
       .set('default display name')
       .set('es', 'other display name')
   )
-  .get();
-const languagevalue = obj.name;
-console.log(languagevalue.get()); // 'other display name'
-console.log(languagevalue.get('en-US')); // 'default display name'
+  .get()
+const languagevalue = obj.name
+console.log(languagevalue.get()) // 'other display name'
+console.log(languagevalue.get('en-US')) // 'default display name'
 ```
+
+Language tags are matched case-insensitively, using RFC 4647 lookup with a
+prefix-match fallback (asking for `en` finds an `en-US` entry, and asking
+for `en-US-x-foo` finds an `en-US` entry). The default language comes from
+the `LANG` environment variable in Node.js, `navigator.language` in
+browsers, and falls back to `en-US`.
