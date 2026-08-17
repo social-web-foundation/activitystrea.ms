@@ -842,39 +842,6 @@ describe('Basics...', () => {
   })
 })
 
-describe('Streaming...', () => {
-  it('Should read and parse from the stream', (done) => {
-    const fs = require('fs')
-    const AS2Stream = as.Stream
-    const path = require('path')
-    const through = require('through2').default
-
-    fs.createReadStream(path.resolve(__dirname, 'test.json'))
-      .pipe(new AS2Stream())
-      .pipe(through.obj((chunk) => {
-        assert(chunk)
-        assert(chunk.type)
-        assert.equal(chunk.type, asv.Person)
-        assert.equal(chunk.name.get(), 'Sally')
-        done()
-      }))
-  })
-
-  it('Should write to the stream', (done) => {
-    const AS2Stream = as.Stream
-    const through = require('through2').default
-    const obj = as.object().name('test').get()
-    obj.stream()
-      .pipe(new AS2Stream())
-      .pipe(through.obj((chunk) => {
-        assert(chunk)
-        assert(chunk.type)
-        assert.equal(chunk.name.valueOf(), 'test')
-      }))
-    done()
-  })
-})
-
 describe('Templates...', () => {
   it('Should use one object as a template for another', (done) => {
     const tmpl = as.like().actor(as.person().name('Joe')).template()

@@ -237,26 +237,6 @@ class AS2 {
   static mention (types, environment) {
     return AS2.link(_types(types, as.Mention), environment)
   }
-
-  static get Stream () {
-    const stream = require('./stream')
-    Object.defineProperty(this, 'Stream', {
-      enumerable: true,
-      configurable: false,
-      value: stream
-    })
-    return stream
-  }
-
-  static get Middleware () {
-    const middle = require('./middle')
-    Object.defineProperty(this, 'Middleware', {
-      enumerable: true,
-      configurable: false,
-      value: middle
-    })
-    return middle
-  }
 }
 
 Object.defineProperties(AS2, {

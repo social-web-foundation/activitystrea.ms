@@ -18,7 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Duration-valued properties (`duration`) returns a plain, frozen object with the same
   properties as [Temporal.Duration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal/Duration). This might become
   a Temporal.Duration in a future version.
-- removed moment as a dependency.
 - Upgraded eslint infrastructure.
 - Update "engines" to LTS 22 so we can use ESM modules.
 - replace rfc5646 with bcp-47-match.
@@ -29,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - JSON-LD Signatures support; options.sign and as2.verify removed.
 - `interval` and `social` extensions.
 - extension mechanism (`use()` and `extend()`).
+- streaming interface, including Express middleware.
+- `moment` as a dependency.
 
 ## [3.3.3] - 2026-05-09
 

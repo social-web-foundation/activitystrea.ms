@@ -1,6 +1,5 @@
 'use strict'
 
-const Readable = require('readable-stream').Readable
 const vocab = require('../vocab')
 const LanguageValue = require('./_languagevalue')
 const models = require('../models')
@@ -15,8 +14,6 @@ const isString = utils.isString
 const _expanded = Symbol('expanded')
 const _base = Symbol('base')
 const _builder = Symbol('builder')
-const _options = Symbol('options')
-const _done = Symbol('done')
 const _items = Symbol('items')
 const _includes = Symbol('includes')
 
@@ -178,31 +175,6 @@ class ValueIterator {
   }
 }
 
-class BaseReader extends Readable {
-  constructor (base, options) {
-    options = options || {}
-    super(options)
-    this[_base] = base
-    this[_options] = options
-  }
-
-  _read () {
-    if (this[_done]) return
-    const objectmode = this[_options].objectMode
-    this[_done] = true
-    const method =
-      objectmode
-        ? this[_base].export
-        : this[_base].write
-    method.call(this[_base], this[_options], (err, doc) => {
-      if (err) return this.emit('error', err)
-      this.push(objectmode ? doc : Buffer.from(doc, 'utf8'))
-      this.push(null)
-      return false
-    })
-  }
-}
-
 function _compose (thing, types, base) {
   if (!types) return
   if (!Array.isArray(types)) types = [types]
@@ -332,20 +304,6 @@ class Base {
   **/
   async prettyWrite (options = {}) {
     return this.write({ space: 2, ...options })
-  }
-
-  /**
-  * Return a Readable Stream for this object
-  **/
-  stream (options) {
-    return new BaseReader(this, options)
-  }
-
-  /**
-  * Pipe this object out to the specified destination
-  **/
-  pipe (dest, options) {
-    return this.stream(options).pipe(dest)
   }
 
   modify () {
@@ -523,14 +481,6 @@ class BaseBuilder {
 
   prettyWrite (options) {
     return this.get().prettyWrite(options)
-  }
-
-  stream (options) {
-    return this.get().stream(options)
-  }
-
-  pipe (dest, options) {
-    return this.get().pipe(dest, options)
   }
 
   template () {
