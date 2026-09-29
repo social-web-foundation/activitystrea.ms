@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.1] - 2026-09-29
+
+### Changed
+
+- Updated mocha, playwright, and transitive dependencies js-yaml and undici.
+- Updated actions/checkout and actions/setup-node to v7.
+- Enabled Dependabot updates for GitHub Actions with a seven-day cooldown.
+- Removed the explicit CodeQL workflow in favor of default CodeQL setup.
+- Corrected the release workflow name to describe npm publishing.
+
 ## [4.0.0] - 2026-08-17
 
 ### Added
@@ -371,3 +381,42 @@ Maintenance release on the 2.1.x line.
   James M Snell. Early work (April 2014 – January 2015) covered the
   initial implementation, package renaming to avoid npm conflicts, and
   documentation cleanup before this first tagged release.
+
+[Unreleased]: https://github.com/social-web-foundation/activitystrea.ms/compare/v4.0.1...HEAD
+[4.0.1]: https://github.com/social-web-foundation/activitystrea.ms/compare/v4.0.0...v4.0.1
+[4.0.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v3.3.3...v4.0.0
+[3.3.3]: https://github.com/social-web-foundation/activitystrea.ms/compare/v3.3.2...v3.3.3
+[3.3.2]: https://github.com/social-web-foundation/activitystrea.ms/compare/v3.3.1...v3.3.2
+[3.3.1]: https://github.com/social-web-foundation/activitystrea.ms/compare/v3.3.0...v3.3.1
+[3.3.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v3.2.0...v3.3.0
+[3.2.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v3.1.0...v3.2.0
+[3.1.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v3.0.0...v3.1.0
+[2.1.4]: https://github.com/social-web-foundation/activitystrea.ms/compare/v2.1.3...v2.1.4
+[3.0.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v2.1.3...v3.0.0
+[2.1.3]: https://github.com/social-web-foundation/activitystrea.ms/compare/v2.1.2...v2.1.3
+[2.1.2]: https://github.com/social-web-foundation/activitystrea.ms/compare/v2.1.1...v2.1.2
+[2.1.1]: https://github.com/social-web-foundation/activitystrea.ms/compare/v2.1.0...v2.1.1
+[2.1.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/2.0.0...v2.1.0
+[2.0.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/1.0.0...2.0.0
+[1.0.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.14.0...1.0.0
+[0.14.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.13.0...v0.14.0
+[0.13.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.12.1...v0.13.0
+[0.12.1]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.12.0...v0.12.1
+[0.12.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.11.0...v0.12.0
+[0.11.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.10.1...v0.11.0
+[0.10.1]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.10.0...v0.10.1
+[0.10.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.9.1...v0.10.0
+[0.9.1]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.9.0...v0.9.1
+[0.9.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.8.1...v0.9.0
+[0.8.1]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.8.0...v0.8.1
+[0.8.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.7.2...v0.8.0
+[0.7.2]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.6.6...v0.7.2
+[0.6.6]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.6.5...v0.6.6
+[0.6.5]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.6.4...v0.6.5
+[0.6.4]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.6.3...v0.6.4
+[0.6.3]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.6.2...v0.6.3
+[0.6.2]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.6.1...v0.6.2
+[0.6.1]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.6.0...v0.6.1
+[0.6.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.2.0...v0.6.0
+[0.2.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v0.0.1...v0.2.0
+[0.0.1]: https://github.com/social-web-foundation/activitystrea.ms/tree/v0.0.1
