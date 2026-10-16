@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-10-15
+
 ### Added
 
 - Support `alsoKnownAs` as a multivalued object property and expose its
@@ -404,7 +406,8 @@ Maintenance release on the 2.1.x line.
   initial implementation, package renaming to avoid npm conflicts, and
   documentation cleanup before this first tagged release.
 
-[Unreleased]: https://github.com/social-web-foundation/activitystrea.ms/compare/v4.0.2...HEAD
+[Unreleased]: https://github.com/social-web-foundation/activitystrea.ms/compare/v4.1.0...HEAD
+[4.1.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v4.0.2...v4.1.0
 [4.0.2]: https://github.com/social-web-foundation/activitystrea.ms/compare/v4.0.1...v4.0.2
 [4.0.1]: https://github.com/social-web-foundation/activitystrea.ms/compare/v4.0.0...v4.0.1
 [4.0.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v3.3.3...v4.0.0
