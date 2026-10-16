@@ -22,15 +22,9 @@
     "lint": "standard"
   },
   "dependencies": {
-    "activitystreams-context": "^3.1.0",
     "bcp-47-match": "^2.0.3",
     "jsonld": "^9.0.0",
-    "tinyduration": "^3.4.1",
-    "vocabs-as": "^3.0.0",
-    "vocabs-asx": "^0.11.1",
-    "vocabs-ldp": "^0.1.0",
-    "vocabs-rdf": "^0.11.1",
-    "vocabs-xsd": "^0.11.1"
+    "tinyduration": "^3.4.1"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",

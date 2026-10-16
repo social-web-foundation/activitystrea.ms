@@ -1,4 +1,4 @@
-import as from 'vocabs-as'
+import as from '../vocabs/as.js'
 import Activity from './_activity.js'
 import Base from './_base.js'
 import Utils from '../utils.js'

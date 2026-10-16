@@ -1,5 +1,5 @@
 import tinyduration from 'tinyduration'
-import xsd from 'vocabs-xsd'
+import xsd from './vocabs/xsd.js'
 
 const _toString = {}.toString
 

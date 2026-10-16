@@ -1,4 +1,4 @@
-import as from 'vocabs-as'
+import as from './vocabs/as.js'
 import Loader from './contextloader.js'
 
 const _input = Symbol('input')

@@ -1,6 +1,6 @@
 import Utils from '../utils.js'
-import as from 'vocabs-as'
-import ldp from 'vocabs-ldp'
+import as from '../vocabs/as.js'
+import ldp from '../vocabs/ldp.js'
 import Base from './_base.js'
 import tinyduration from 'tinyduration'
 

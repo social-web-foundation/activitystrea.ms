@@ -1,7 +1,8 @@
 {
   "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaVersion": 2022
+    "ecmaVersion": 2022,
+    "sourceType": "module"
   },
   "env": {
     "es6": true,

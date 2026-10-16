@@ -1,5 +1,5 @@
-import as from 'vocabs-as'
-import xsd from 'vocabs-xsd'
+import as from '../vocabs/as.js'
+import xsd from '../vocabs/xsd.js'
 import Utils from '../utils.js'
 import CollectionPage from './_collectionpage.js'
 import OrderedCollection from './_orderedcollection.js'

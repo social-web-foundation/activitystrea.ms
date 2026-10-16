@@ -1,6 +1,6 @@
 import jsonld from './jsonld.js'
 import Loader from './contextloader.js'
-import as from 'vocabs-as'
+import as from './vocabs/as.js'
 import models from './models/models.js'
 
 function _types (types, additional) {

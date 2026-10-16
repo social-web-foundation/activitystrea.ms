@@ -2,7 +2,7 @@ import assert from 'node:assert'
 import as from '../src/activitystreams.js'
 import models from '../src/models/models.js'
 import LanguageValue from '../src/models/_languagevalue.js'
-import asv from 'vocabs-as'
+import asv from '../src/vocabs/as.js'
 
 const now = new Date()
 const nowiso = now.toISOString()

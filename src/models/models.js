@@ -1,4 +1,4 @@
-import as from 'vocabs-as'
+import as from '../vocabs/as.js'
 import vocab from '../vocab.js'
 import { compose } from './compose.js'
 import LanguageValue from './_languagevalue.js'

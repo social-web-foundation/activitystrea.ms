@@ -1,5 +1,5 @@
 import jsonldFactory from 'jsonld'
-import as from 'vocabs-as'
+import as from './vocabs/as.js'
 import { asContext, securityContext } from './contexts/contexts.js'
 
 const jsonld = jsonldFactory()

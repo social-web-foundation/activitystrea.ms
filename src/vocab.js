@@ -1,8 +1,8 @@
-import as from 'vocabs-as'
-import asx from 'vocabs-asx'
-import ldp from 'vocabs-ldp'
-import rdf from 'vocabs-rdf'
-import xsd from 'vocabs-xsd'
+import as from './vocabs/as.js'
+import asx from './vocabs/asx.js'
+import ldp from './vocabs/ldp.js'
+import rdf from './vocabs/rdf.js'
+import xsd from './vocabs/xsd.js'
 
 const FUNCTIONAL_OBJECT_PROPERTIES = [
   as.describes, as.subject, as.first, rdf.rest, as.partOf, as.current,

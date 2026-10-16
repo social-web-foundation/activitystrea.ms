@@ -1,0 +1,17 @@
+activitystrea.ms
+
+The modules in src/vocabs/as.js, asx.js, ldp.js, rdf.js, xsd.js, and
+vocabulary.js are adapted from the linkeddata-vocabs packages by James M Snell:
+https://github.com/jasnell/linkeddata-vocabs
+
+Source package versions: vocabs-as 3.0.0, vocabs-asx 0.11.1,
+vocabs-ldp 0.1.0, vocabs-rdf 0.11.1, vocabs-xsd 0.11.1, and vocabs 0.11.2.
+These modules have been converted from CommonJS to ECMAScript modules and
+updated to use local imports. They are licensed under the Apache License,
+Version 2.0; see LICENSE.
+
+src/vocabs/context.js contains the context data from activitystreams-context
+3.1.0 by James M Snell, wrapped as an ECMAScript module:
+https://github.com/jasnell/activitystreams-context
+
+The context data retains its MIT license; see the license notice in src/vocabs/context.js.

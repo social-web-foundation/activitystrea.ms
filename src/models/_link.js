@@ -1,6 +1,6 @@
 import Utils from '../utils.js'
-import as from 'vocabs-as'
-import xsd from 'vocabs-xsd'
+import as from '../vocabs/as.js'
+import xsd from '../vocabs/xsd.js'
 import Base from './_base.js'
 
 const range = Utils.range

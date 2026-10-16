@@ -1,8 +1,8 @@
 import assert from 'node:assert'
-import as from 'vocabs-as'
-import asx from 'vocabs-asx'
-import xsd from 'vocabs-xsd'
-import ldp from 'vocabs-ldp'
+import as from '../src/vocabs/as.js'
+import asx from '../src/vocabs/asx.js'
+import xsd from '../src/vocabs/xsd.js'
+import ldp from '../src/vocabs/ldp.js'
 import vocab from '../src/vocab.js'
 
 // The vocab tables module: the reasoner replacement. Static,

@@ -1,4 +1,4 @@
-import as from 'vocabs-as'
+import as from '../vocabs/as.js'
 import Base from './_base.js'
 
 const composedType = Base.composedType
