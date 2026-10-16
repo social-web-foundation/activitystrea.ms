@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.1] - 2026-10-16
+
+### Changed
+
+- Limit the npm package to source files, LICENSE, NOTICE, README, and package
+  metadata, excluding tests and development tooling.
+
+### Removed
+
+- Remove the DeepSource configuration.
+
 ## [4.1.0] - 2026-10-15
 
 ### Added
@@ -406,7 +417,8 @@ Maintenance release on the 2.1.x line.
   initial implementation, package renaming to avoid npm conflicts, and
   documentation cleanup before this first tagged release.
 
-[Unreleased]: https://github.com/social-web-foundation/activitystrea.ms/compare/v4.1.0...HEAD
+[Unreleased]: https://github.com/social-web-foundation/activitystrea.ms/compare/v4.1.1...HEAD
+[4.1.1]: https://github.com/social-web-foundation/activitystrea.ms/compare/v4.1.0...v4.1.1
 [4.1.0]: https://github.com/social-web-foundation/activitystrea.ms/compare/v4.0.2...v4.1.0
 [4.0.2]: https://github.com/social-web-foundation/activitystrea.ms/compare/v4.0.1...v4.0.2
 [4.0.1]: https://github.com/social-web-foundation/activitystrea.ms/compare/v4.0.0...v4.0.1
