@@ -3,7 +3,7 @@
 import defineVocabulary from './vocabulary.js'
 import context from './context.js'
 const vocabulary = {}
-const ignore = new Set(['@vocab', 'xsd', 'as', 'id', 'type', 'inbox'])
+const ignore = new Set(['@vocab', 'xsd', 'as', 'id', 'type', 'inbox', 'vcard'])
 
 const terms = {
   * [Symbol.iterator] () {

@@ -23,12 +23,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+// Context refreshed from https://www.w3.org/ns/activitystreams
 export default {
   '@context': {
     '@vocab': '_:',
     xsd: 'http://www.w3.org/2001/XMLSchema#',
     as: 'https://www.w3.org/ns/activitystreams#',
     ldp: 'http://www.w3.org/ns/ldp#',
+    vcard: 'http://www.w3.org/2006/vcard/ns#',
     id: '@id',
     type: '@type',
     Accept: 'as:Accept',
@@ -393,6 +395,10 @@ export default {
     },
     shares: {
       '@id': 'as:shares',
+      '@type': '@id'
+    },
+    alsoKnownAs: {
+      '@id': 'as:alsoKnownAs',
       '@type': '@id'
     }
   }

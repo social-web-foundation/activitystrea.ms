@@ -24,7 +24,7 @@ const OBJECT_PROPERTIES = new Set([
   as.inReplyTo, as.items, as.location, as.object, as.oneOf, as.anyOf,
   as.preview, as.replies, as.formerType, as.result, as.audience, as.tag,
   as.target, as.origin, as.to, as.url, ldp.inbox, as.outbox, as.followers,
-  as.following, as.liked
+  as.following, as.liked, as.alsoKnownAs
 ])
 
 const LANGUAGE_PROPERTIES = new Set([as.name, as.summary, as.content])

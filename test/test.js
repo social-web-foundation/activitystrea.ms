@@ -879,7 +879,7 @@ describe('Extensions...', () => {
         as.offer()
           .name('Thank you')
           .id('https://github.com/jasnell/activitystrea.ms/issues/13#issuecomment-376722358')
-          .set('vcard:given-name', 'Thank')
+          .set('http://www.w3.org/2006/vcard/ns#given-name', 'Thank')
       )
       .name('The offer')
       .content('Evan offered his thanks to Denis for his bug report')

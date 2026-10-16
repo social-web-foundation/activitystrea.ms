@@ -9,11 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support `alsoKnownAs` as a multivalued object property and expose its
+  Activity Streams vocabulary constant.
+
 ### Changed
 
 - Replace the CommonJS `vocabs-*` packages and `activitystreams-context`
   dependency with local ESM modules in `src/vocabs/`, preserving vocabulary
   exports and context data. Retain source attribution and license notices.
+- Refresh the bundled Activity Streams context from W3C, adding `alsoKnownAs`
+  and the `vcard` prefix. Exclude `vcard` from generated AS vocabulary terms.
 
 ## [4.0.2] - 2026-10-05
 
