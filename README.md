@@ -21,75 +21,84 @@ WebKit.
 
 ### Usage
 
-```javascript
-import as from 'activitystrea.ms'
-
-// Create a simple object
-const doc = await as.object()
-  .name('baz')
-  .content(
-    as.langmap()
-      .set('en', 'bar')
-      .set('fr', 'foo'))
-  .publishedNow()
-  .prettyWrite()
-```
-
-Which produces the output:
-
-```json
-{
-  "@context": "https://www.w3.org/ns/activitystreams",
-  "@type": "Object",
-  "contentMap": {
-    "en": "bar",
-    "fr": "foo"
-  },
-  "name": "baz",
-  "published": "2015-07-17T00:50:09.889Z"
-}
-```
-
-```javascript
-// Create a simple activity
-const doc = await as.create()
-  .actor('acct:sally@example.org')
-  .object('http://www.example.org/post')
-  .prettyWrite()
-```
-
-Which produces the output:
-
-```json
-{
-  "@context": "https://www.w3.org/ns/activitystreams",
-  "@type": "Create",
-  "actor": "acct:sally@example.org",
-  "object": "http://www.example.org/post"
-}
-```
-
-To parse a received Activity Streams 2.0 document, use `as.import()`:
+Use `as.import()` to turn a plain JavaScript Activity Streams document into a
+model object. This works for documents you receive and documents you create.
 
 ```javascript
 import as from 'activitystrea.ms'
 
-const obj = await as.import({
+const activity = await as.import({
   '@context': 'https://www.w3.org/ns/activitystreams',
   type: 'Create',
-  actor: 'https://social.example/sally',
+  actor: 'https://social.example/user/sample',
   object: {
     type: 'Note',
     content: 'Hello, world!'
   }
 })
-
-console.log(obj.type)
-console.log(obj.actor.first.id)
-console.log(obj.object.first.content.get())
 ```
 
-The API uses a fluent factory pattern for creating AS objects. There are
+#### Reading properties
+
+Model type names are expanded IRIs. Object-valued properties are iterable
+collections of references or embedded objects; `.first` retrieves the first
+value. Text properties such as `content` are language values, read with `.get()`.
+
+```javascript
+console.log(activity.type) // 'https://www.w3.org/ns/activitystreams#Create'
+console.log(activity.actor.first.id) // 'https://social.example/user/sample'
+console.log(activity.object.first.content.get()) // 'Hello, world!'
+```
+
+Language maps can be supplied directly in the imported document:
+
+```javascript
+const note = await as.import({
+  '@context': 'https://www.w3.org/ns/activitystreams',
+  type: 'Note',
+  contentMap: {
+    en: 'Hello, world!',
+    fr: 'Bonjour tout le monde !'
+  }
+})
+
+console.log(note.content.get('fr')) // 'Bonjour tout le monde !'
+```
+
+#### Exporting and serializing
+
+`export()` returns a plain JavaScript document after JSON-LD compaction.
+`write()` returns a JSON string, and `prettyWrite()` returns indented JSON.
+All three methods are asynchronous.
+
+```javascript
+const document = await activity.export()
+console.log(document.type) // 'Create'
+console.log(document.object.content) // 'Hello, world!'
+
+const json = await activity.write()
+const prettyJson = await activity.prettyWrite()
+```
+
+To retain an imported document's original context when exporting, pass
+`{ useOriginalContext: true }` to `export()`, `write()`, or `prettyWrite()`.
+Custom context documents can be registered with `as.registerContext()` for
+offline resolution; see the API reference below.
+
+#### Browser use
+
+Bundle the library and its dependencies with browser tooling such as esbuild
+or webpack. The source dependency graph still includes CommonJS packages, so
+resolving package names alone is insufficient for direct browser imports.
+Browser tests that import source modules need the same dependency
+transformation as the application build.
+
+The fluent builder interface remains supported as an alternative; see
+[Builder interface](#builder-interface) below.
+
+## Builder interface
+
+The builder interface uses a fluent factory pattern for creating AS objects. There are
 factory methods for each of the main types of objects defined by the Activity
 Streams 2.0 vocabulary. Each takes an optional array of types that will be set
 on the object. If the `[types]` is unspecified, a default will be assigned
@@ -214,6 +223,42 @@ This is largely because of the JSON-LD processing that's happening under the cov
 
 The base module. (CommonJS consumers on Node 22.12+ can use
 `const as = require('activitystrea.ms')` instead.)
+
+#### `<Promise<as.models.Object>> as.import(obj[, options])`
+
+Imports the specified JavaScript object `obj`, performing JSON-LD expansion as necessary. Returns a promise that resolves to the imported `as.models.Object`.
+
+```javascript
+const obj = {
+  '@context': 'https://www.w3.org/ns/activitystreams',
+  type: 'Person',
+  name: 'Joe'
+}
+const imp = await as.import(obj)
+console.log(imp.type)
+```
+
+#### `<void> as.registerContext(url, context)`
+
+Registers a JSON-LD context document for offline resolution. When an
+imported document's `@context` includes the registered URL, the local copy
+is used instead of fetching it over the network. The AS2 context and
+`https://w3id.org/security/v1` are pre-registered.
+
+```javascript
+as.registerContext('https://example.com/context', {
+  '@context': {
+    ex: 'https://example.com/context#',
+    bar: 'ex:bar'
+  }
+})
+```
+
+#### `as.mediaType`
+
+Set to a constant value of `application/activity+json`
+
+### Builder factories
 
 #### `<as.models.Object.Builder> as.object([types])`
 
@@ -428,40 +473,6 @@ Returns a new `as.models.Link.Builder` instance generating an `http://www.w3.org
 Returns a new `as.models.Tombstone.Builder` instance generating an
 `http://www.w3.org/ns/activity#Tombstone` object.
 
-#### `<Promise<as.models.Object>> as.import(obj[, options])`
-
-Imports the specified JavaScript object `obj`, performing JSON-LD expansion as necessary. Returns a promise that resolves to the imported `as.models.Object`.
-
-```javascript
-const obj = {
-  '@context': 'https://www.w3.org/ns/activitystreams',
-  type: 'Person',
-  name: 'Joe'
-}
-const imp = await as.import(obj)
-console.log(imp.type)
-```
-
-#### `<void> as.registerContext(url, context)`
-
-Registers a JSON-LD context document for offline resolution. When an
-imported document's `@context` includes the registered URL, the local copy
-is used instead of fetching it over the network. The AS2 context and
-`https://w3id.org/security/v1` are pre-registered.
-
-```javascript
-as.registerContext('https://example.com/context', {
-  '@context': {
-    ex: 'https://example.com/context#',
-    bar: 'ex:bar'
-  }
-})
-```
-
-#### `as.mediaType`
-
-Set to a constant value of `application/activity+json`
-
 ### `as.models.Base(expanded, builder)`
 
 `as.models.Base` is the base class for all objects. It is not intended to be used directly by developers.
@@ -490,7 +501,7 @@ Returns the value for the specified `key`. The return value will vary based on t
 Exports the object by performing a JSON-LD compaction. If export fails, the promise will reject with the error. If the export succeeds, the promise will resolve with the exported JavaScript object.
 
 ```javascript
-const obj = as.object().name('Joe').get()
+const obj = await as.import({ type: 'Object', name: 'Sample Person' })
 const exp = await obj.export()
 console.log(exp.name)
 console.log(exp.type)
@@ -501,7 +512,7 @@ console.log(exp.type)
 Write the object out to a JSON-LD string. If writing fails, the promise will reject with the error. If the write succeeds, the promise will resolve with the JSON-LD string.
 
 ```javascript
-const obj = as.object().name('Joe').get()
+const obj = await as.import({ type: 'Object', name: 'Sample Person' })
 const string = await obj.write()
 console.log(string)
 ```
@@ -511,7 +522,7 @@ console.log(string)
 Write the object out to an indented JSON-LD string. If writing fails, the promise will reject with the error. If the write succeeds, the promise will resolve with the JSON-LD string.
 
 ```javascript
-const obj = as.object().name('Joe').get()
+const obj = await as.import({ type: 'Object', name: 'Sample Person' })
 const string = await obj.prettyWrite()
 console.log(string)
 ```
