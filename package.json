@@ -41,6 +41,12 @@
     ]
   },
   "main": "./src/activitystreams.js",
+  "files": [
+    "src/",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ],
   "engines": {
     "node": ">=22.12.0"
   }
