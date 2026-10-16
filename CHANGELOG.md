@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   exports and context data. Retain source attribution and license notices.
 - Refresh the bundled Activity Streams context from W3C, adding `alsoKnownAs`
   and the `vcard` prefix. Exclude `vcard` from generated AS vocabulary terms.
+- Update Mocha and Playwright.
 
 ## [4.0.2] - 2026-10-05
 
